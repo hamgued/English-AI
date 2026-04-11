@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 — Introduction and Basics of AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0e1f3b;
+    --navy-mid: #1a3461;
+    --blue: #1768c4;
+    --blue-light: #3d8ef0;
+    --gold: #e8a020;
+    --gold-light: #f5c842;
+    --cream: #faf7f2;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --text-muted: #5a6070;
+    --border: #ddd8cf;
+    --success: #2d8a4e;
+    --error: #c0392b;
+    --radius: 10px;
+    --shadow: 0 4px 20px rgba(14,31,59,0.12);
+    --shadow-lg: 0 8px 40px rgba(14,31,59,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .lab-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    border-right: 1px solid rgba(255,255,255,0.2);
+    padding-right: 16px;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  .lab-logo a { color: inherit; text-decoration: none; }
+  .lab-logo a:hover { color: var(--gold-light); }
+  .header-title {
+    flex: 1;
+  }
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: white;
+    line-height: 1.2;
+  }
+  .header-title .subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-author {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .header-author a {
+    color: var(--gold-light);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .header-author a:hover { text-decoration: underline; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.08);
+    height: 3px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── LAYOUT ── */
+  .main-layout {
+    display: flex;
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 0;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: white;
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .sidebar-section {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 20px 6px;
+    font-weight: 600;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text);
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.3;
+  }
+  .nav-item:hover { background: var(--cream); color: var(--blue); }
+  .nav-item.active {
+    background: #eef4fd;
+    color: var(--blue);
+    border-left-color: var(--blue);
+    font-weight: 600;
+  }
+  .nav-num {
+    font-size: 10px;
+    color: var(--text-muted);
+    min-width: 20px;
+    font-weight: 600;
+  }
+  .nav-item.active .nav-num { color: var(--blue); }
+  .nav-done { margin-left: auto; color: var(--success); font-size: 13px; }
+
+  /* ── CONTENT ── */
+  .content-area {
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 880px;
+    min-width: 0;
+  }
+
+  /* ── SECTION PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .panel-header {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .panel-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+
+  /* ── INTRO PANEL ── */
+  .intro-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1e4080 100%);
+    border-radius: var(--radius);
+    padding: 40px;
+    color: white;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(232,160,32,0.12);
+  }
+  .intro-hero h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .intro-hero p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    opacity: 0.85;
+    max-width: 620px;
+    position: relative;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .toc-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .toc-card:hover { border-color: var(--blue); box-shadow: var(--shadow); transform: translateY(-1px); }
+  .toc-card-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    background: #eef4fd;
+    border-radius: 4px;
+    padding: 2px 7px;
+    min-width: fit-content;
+    margin-top: 2px;
+  }
+  .toc-card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .toc-card-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* ── VIDEO SECTION ── */
+  .video-wrap {
+    background: #000;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-lg);
+    aspect-ratio: 16/9;
+  }
+  .video-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  .resource-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--blue);
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .resource-link:hover { background: #eef4fd; border-color: var(--blue); }
+
+  /* ── FLASHCARDS ── */
+  .flashcard-intro {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .flashcard-intro a { color: var(--blue); }
+  .fc-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .fc-counter {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: var(--navy-mid); }
+  .btn-secondary { background: white; border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { background: var(--cream); }
+  .btn-gold { background: var(--gold); color: white; }
+  .btn-gold:hover { background: #c8871a; }
+
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto 24px;
+  }
+  .flashcard {
+    width: 100%;
+    height: 220px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    border-radius: var(--radius);
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    text-align: center;
+  }
+  .fc-front {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white;
+    box-shadow: var(--shadow-lg);
+  }
+  .fc-front .term {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .fc-front .hint {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    opacity: 0.55;
+    letter-spacing: 0.06em;
+  }
+  .fc-back {
+    background: white;
+    border: 2px solid var(--blue);
+    transform: rotateY(180deg);
+    box-shadow: var(--shadow-lg);
+    color: var(--text);
+  }
+  .fc-back .definition {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .fc-back .term-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+  .fc-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* ── DRAG & DROP ── */
+  .dnd-instructions {
+    background: #fff8ec;
+    border: 1px solid #f0c060;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+  .dnd-terms-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+    min-height: 50px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+  }
+  .dnd-term {
+    padding: 8px 16px;
+    background: var(--navy);
+    color: white;
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .dnd-term:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(23,104,196,0.3); }
+  .dnd-term.dragging { opacity: 0.4; cursor: grabbing; }
+  .dnd-term.placed { display: none; }
+
+  .dnd-list { display: flex; flex-direction: column; gap: 12px; }
+  .dnd-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .dnd-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue);
+    min-width: 22px;
+    margin-top: 3px;
+  }
+  .dnd-def {
+    flex: 1;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .dnd-drop {
+    min-width: 160px;
+    min-height: 34px;
+    border: 2px dashed #b0c4e0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: #9aadcb;
+    transition: all 0.15s;
+    padding: 4px 8px;
+    text-align: center;
+  }
+  .dnd-drop.dragover { border-color: var(--blue); background: #eef4fd; color: var(--blue); }
+  .dnd-drop.correct { border-color: var(--success); background: #eaf6ef; color: var(--success); border-style: solid; }
+  .dnd-drop.incorrect { border-color: var(--error); background: #fdf0ef; color: var(--error); border-style: solid; }
+  .dnd-drop .placed-term {
+    padding: 6px 12px;
+    border-radius: 14px;
+    background: var(--navy);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .dnd-drop.correct .placed-term { background: var(--success); }
+  .dnd-drop.incorrect .placed-term { background: var(--error); }
+
+  .dnd-score {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 20px;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    display: none;
+  }
+  .dnd-score-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .dnd-score-msg { font-size: 14px; color: var(--text); }
+
+  /* ── TIMELINE ── */
+  .timeline-wrap { position: relative; padding-left: 32px; }
+  .timeline-wrap::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--navy), var(--blue), var(--gold));
+  }
+  .t-event {
+    position: relative;
+    margin-bottom: 28px;
+    cursor: pointer;
+  }
+  .t-dot {
+    position: absolute;
+    left: -26px;
+    top: 12px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--blue);
+    transition: all 0.2s;
+  }
+  .t-event.open .t-dot { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .t-header {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.2s;
+  }
+  .t-event:hover .t-header, .t-event.open .t-header {
+    border-color: var(--blue);
+    box-shadow: var(--shadow);
+  }
+  .t-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--navy);
+    min-width: 52px;
+  }
+  .t-event.open .t-year { color: var(--blue); }
+  .t-headline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .t-chevron {
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+  }
+  .t-event.open .t-chevron { transform: rotate(90deg); }
+  .t-body {
+    display: none;
+    background: white;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 18px 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .t-event.open .t-body { display: block; }
+  .t-img {
+    float: right;
+    max-width: 160px;
+    margin: 0 0 12px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .t-credit {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    clear: both;
+  }
+
+  /* ── READINGS ── */
+  .reading-text {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--text);
+  }
+  .reading-text p { margin-bottom: 1em; }
+  .reading-text strong { font-weight: 600; }
+
+  /* ── ACTIVITIES & SOURCES ── */
+  .activity-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .activity-card:hover { border-color: var(--blue); box-shadow: var(--shadow); transform: translateX(4px); }
+  .activity-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: #eef4fd;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    min-width: 40px;
+  }
+  .activity-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+  .activity-desc { font-size: 13px; color: var(--text-muted); }
+
+  .source-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .source-item:last-child { border-bottom: none; }
+  .source-item a { color: var(--blue); text-decoration: none; font-weight: 500; }
+  .source-item a:hover { text-decoration: underline; }
+  .source-author { color: var(--text-muted); font-size: 12px; margin-top: 3px; }
+
+  /* ── PODCAST ── */
+  .podcast-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: var(--radius);
+    padding: 32px;
+    color: white;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .podcast-icon { font-size: 52px; }
+  .podcast-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .podcast-info p { font-size: 0.88rem; opacity: 0.7; line-height: 1.6; margin-bottom: 14px; }
+  .podcast-warn {
+    background: rgba(232,160,32,0.15);
+    border: 1px solid rgba(232,160,32,0.4);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+
+  /* ── NAVIGATION BOTTOM ── */
+  .panel-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content-area { padding: 24px 20px; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .header-inner { padding: 12px 16px; }
+    .podcast-card { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="lab-logo">
+      <a href="https://lab.fi/en" target="_blank">LAB University<br>of Applied Sciences</a>
+    </div>
+    <div class="header-title">
+      <h1>Module 1 — Introduction and Basics of AI</h1>
+      <div class="subtitle">English for Academic & Business Purposes</div>
+    </div>
+    <div class="header-author">
+      Compiled by<br>
+      <a href="https://www.linkedin.com/in/hagu1/" target="_blank">Hamid Guedra</a>
+    </div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</header>
+
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">Module 1</div>
+
+    <div class="nav-item active" onclick="showPanel(0)" id="nav-0">
+      <span class="nav-num">—</span> Introduction
+    </div>
+    <div class="nav-item" onclick="showPanel(1)" id="nav-1">
+      <span class="nav-num">1.1</span> AI as a Concept
+    </div>
+    <div class="nav-item" onclick="showPanel(2)" id="nav-2">
+      <span class="nav-num">1.2</span> AI as a Word
+    </div>
+    <div class="nav-item" onclick="showPanel(3)" id="nav-3">
+      <span class="nav-num">1.3</span> Key Terms: Flashcards
+    </div>
+    <div class="nav-item" onclick="showPanel(4)" id="nav-4">
+      <span class="nav-num">1.4</span> Key Terms: Drag &amp; Drop
+    </div>
+    <div class="nav-item" onclick="showPanel(5)" id="nav-5">
+      <span class="nav-num">1.5</span> AI Metaphors
+    </div>
+    <div class="nav-item" onclick="showPanel(6)" id="nav-6">
+      <span class="nav-num">1.6</span> Generative AI
+    </div>
+    <div class="nav-item" onclick="showPanel(7)" id="nav-7">
+      <span class="nav-num">1.7</span> Online Activities
+    </div>
+    <div class="nav-item" onclick="showPanel(8)" id="nav-8">
+      <span class="nav-num">1.8</span> History: Timeline
+    </div>
+    <div class="nav-item" onclick="showPanel(9)" id="nav-9">
+      <span class="nav-num">1.9</span> Deep Dive Podcast
+    </div>
+    <div class="nav-item" onclick="showPanel(10)" id="nav-10">
+      <span class="nav-num">1.10</span> Readings
+    </div>
+    <div class="nav-item" onclick="showPanel(11)" id="nav-11">
+      <span class="nav-num">1.11</span> Sources
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="content-area">
+
+    <!-- PANEL 0: INTRODUCTION -->
+    <section class="panel active" id="panel-0">
+      <div class="panel-header">
+        <div class="panel-tag">Module 1</div>
+        <h2>Introduction &amp; Basics</h2>
+      </div>
+
+      <div class="intro-hero">
+        <h3>Welcome to Module 1</h3>
+        <p>The history of AI is intertwined with developments in computing and the internet. While AI has experienced periods of stagnation — <em>AI winters</em> — recent advancements have led to breakthroughs such as generative AI. Generative AI creates new content often indistinguishable from human-created work. It is essential to critically evaluate these outputs due to inaccuracies, biases, and outdated information.</p>
+      </div>
+
+      <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;margin-bottom:16px;color:var(--navy);">This module has 11 subsections. Click any section to begin:</p>
+      <div class="toc-grid">
+        <div class="toc-card" onclick="showPanel(1)">
+          <span class="toc-card-num">1.1</span>
+          <div><div class="toc-card-title">AI as a Concept</div><div class="toc-card-meta">Video · 5:20 min</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(2)">
+          <span class="toc-card-num">1.2</span>
+          <div><div class="toc-card-title">AI as an English Language Word</div><div class="toc-card-meta">Video · 2:30 min</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(3)">
+          <span class="toc-card-num">1.3</span>
+          <div><div class="toc-card-title">Key Terms: Flashcards</div><div class="toc-card-meta">Interactive · 23 terms</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(4)">
+          <span class="toc-card-num">1.4</span>
+          <div><div class="toc-card-title">Key Terms: Drag &amp; Drop</div><div class="toc-card-meta">Activity · 11 terms</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(5)">
+          <span class="toc-card-num">1.5</span>
+          <div><div class="toc-card-title">AI Metaphors</div><div class="toc-card-meta">Video · 5:40 min</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(6)">
+          <span class="toc-card-num">1.6</span>
+          <div><div class="toc-card-title">Generative AI</div><div class="toc-card-meta">Video · 6:35 min</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(7)">
+          <span class="toc-card-num">1.7</span>
+          <div><div class="toc-card-title">Interactive Online Activities</div><div class="toc-card-meta">External tools</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(8)">
+          <span class="toc-card-num">1.8</span>
+          <div><div class="toc-card-title">History of AI: Timeline</div><div class="toc-card-meta">1920 – 2045 · 17 events</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(9)">
+          <span class="toc-card-num">1.9</span>
+          <div><div class="toc-card-title">Deep Dive Podcast</div><div class="toc-card-meta">Audio · 23:30 min</div></div>
+        </div>
+        <div class="toc-card" onclick="showPanel(10)">
+          <span class="toc-card-num">1.10</span>
+          <div><div class="toc-card-title">Readings</div><div class="toc-card-meta">Texts &amp; articles</div></div>
+        </div>
+      </div>
+
+      <div class="panel-nav">
+        <span></span>
+        <button class="btn btn-primary" onclick="showPanel(1)">Start with 1.1 →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 1: AI AS CONCEPT -->
+    <section class="panel" id="panel-1">
+      <div class="panel-header">
+        <div class="panel-tag">1.1</div>
+        <h2>AI as a Concept</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/IUL5yA7-K_I" allowfullscreen loading="lazy" title="1.1 AI as a Concept"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1pqNiWQR4xQFTadeJFdvJRcqW8vCdFYob/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(0)">← Introduction</button>
+        <button class="btn btn-primary" onclick="showPanel(2)">1.2 AI as a Word →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 2: AI AS WORD -->
+    <section class="panel" id="panel-2">
+      <div class="panel-header">
+        <div class="panel-tag">1.2</div>
+        <h2>AI as an English Language Word</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/g95Gc19-cWY" allowfullscreen loading="lazy" title="1.2 AI as an English Language Word"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1BkcGovWCFDS0dGLV2sw6w2ig-_X3IOg5/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(1)">← 1.1</button>
+        <button class="btn btn-primary" onclick="showPanel(3)">1.3 Flashcards →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 3: FLASHCARDS -->
+    <section class="panel" id="panel-3">
+      <div class="panel-header">
+        <div class="panel-tag">1.3</div>
+        <h2>Some Key Terms of AI: Flashcards</h2>
+      </div>
+
+      <div class="flashcard-intro">
+        The key terms list was compiled by <a href="https://www.linkedin.com/in/hagu1/" target="_blank">Hamid Guedra</a>, partly based on <em>Artificial Intelligence: Glossary</em> by Caleb Sponheim and <em>Defining Data Science and AI</em> by the Alan Turing Institute. Definitions were iteratively refined using Google NotebookLM, Claude Sonnet 3.5, and Gemini.<br>
+        <a href="https://drive.google.com/file/d/1walMBrBF_2Gnwoinp_GcAU-SMYDJfXZ_/view?usp=drive_link" target="_blank" class="resource-link" style="margin-top:8px;display:inline-flex;">📥 Download complete key terms list</a>
+      </div>
+
+      <div class="fc-controls">
+        <button class="btn btn-secondary" onclick="prevCard()">← Previous</button>
+        <button class="btn btn-secondary" onclick="nextCard()">Next →</button>
+        <button class="btn btn-secondary" onclick="shuffleCards()">🔀 Shuffle</button>
+        <span class="fc-counter" id="fcCounter">1 / 23</span>
+      </div>
+
+      <div class="flashcard-container">
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+          <div class="fc-face fc-front">
+            <div class="term" id="fcTerm">Algorithm</div>
+            <div class="hint">Click to see definition</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="term-label" id="fcTermBack">Algorithm</div>
+            <div class="definition" id="fcDefinition">An algorithm is a set of step-by-step instructions that tell a computer how to perform a task or solve a problem. It is the fundamental building block of how computers process information and make decisions.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc-nav">
+        <button class="btn btn-secondary" onclick="prevCard()">← Prev</button>
+        <button class="btn btn-gold" onclick="flipCard()">↩ Flip Card</button>
+        <button class="btn btn-secondary" onclick="nextCard()">Next →</button>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(2)">← 1.2</button>
+        <button class="btn btn-primary" onclick="showPanel(4)">1.4 Drag &amp; Drop →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 4: DRAG AND DROP -->
+    <section class="panel" id="panel-4">
+      <div class="panel-header">
+        <div class="panel-tag">1.4</div>
+        <h2>Some Key Terms of AI: Drag &amp; Drop</h2>
+      </div>
+
+      <div class="dnd-instructions">
+        💡 <strong>Instructions:</strong> First, study the flashcards in section 1.3. Then drag each term from the bank below and drop it onto the matching definition.
+      </div>
+
+      <div class="dnd-terms-pool" id="termsPool"></div>
+      <div class="dnd-list" id="dndList"></div>
+
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="checkDnD()">✓ Check Answers</button>
+        <button class="btn btn-secondary" onclick="showSolution()">👁 Show Solution</button>
+        <button class="btn btn-secondary" onclick="resetDnD()">↺ Reset</button>
+      </div>
+
+      <div class="dnd-score" id="dndScore">
+        <div class="dnd-score-num" id="dndScoreNum">0/11</div>
+        <div class="dnd-score-msg" id="dndScoreMsg">Keep studying!</div>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(3)">← 1.3</button>
+        <button class="btn btn-primary" onclick="showPanel(5)">1.5 AI Metaphors →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 5: AI METAPHORS -->
+    <section class="panel" id="panel-5">
+      <div class="panel-header">
+        <div class="panel-tag">1.5</div>
+        <h2>AI Metaphors</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/ApHYm684IIo" allowfullscreen loading="lazy" title="1.5 AI Metaphors"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/144bxIRzG_vMS86v0VOtopsXgGzOJt2UE/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(4)">← 1.4</button>
+        <button class="btn btn-primary" onclick="showPanel(6)">1.6 Generative AI →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 6: GENERATIVE AI -->
+    <section class="panel" id="panel-6">
+      <div class="panel-header">
+        <div class="panel-tag">1.6</div>
+        <h2>Generative AI</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/KC9WsfdQhQ8" allowfullscreen loading="lazy" title="1.6 Generative AI"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1RqL07kX0aUrY-qlwDiif8-VVUXoPy6xP/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(5)">← 1.5</button>
+        <button class="btn btn-primary" onclick="showPanel(7)">1.7 Activities →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 7: INTERACTIVE ACTIVITIES -->
+    <section class="panel" id="panel-7">
+      <div class="panel-header">
+        <div class="panel-tag">1.7</div>
+        <h2>Interactive Online Activities</h2>
+      </div>
+      <p style="font-size:0.9rem;margin-bottom:20px;color:var(--text-muted);">Try some of these interactive online activities to experience AI first-hand:</p>
+
+      <a href="https://tm.gen-ai.fi/image/general" target="_blank" class="activity-card">
+        <div class="activity-icon">🤖</div>
+        <div>
+          <div class="activity-name">GenAI Teachable Machine</div>
+          <div class="activity-desc">Train an AI model in your browser to recognize images and patterns.</div>
+        </div>
+      </a>
+      <a href="https://teachablemachine.withgoogle.com/" target="_blank" class="activity-card">
+        <div class="activity-icon">🧪</div>
+        <div>
+          <div class="activity-name">Teachable Machine with Google</div>
+          <div class="activity-desc">Teach an AI to identify images, audio, and poses — no coding needed.</div>
+        </div>
+      </a>
+      <a href="https://machinelearningforkids.co.uk/#!/welcome" target="_blank" class="activity-card">
+        <div class="activity-icon">📚</div>
+        <div>
+          <div class="activity-name">Machine Learning for Kids</div>
+          <div class="activity-desc">Train an algorithm to recognize text, images, numbers, and sounds.</div>
+        </div>
+      </a>
+      <a href="https://www.rosebud.ai/ai-game-creator" target="_blank" class="activity-card">
+        <div class="activity-icon">🎮</div>
+        <div>
+          <div class="activity-name">AI Game Creator</div>
+          <div class="activity-desc">Build and prototype games with the help of AI tools.</div>
+        </div>
+      </a>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(6)">← 1.6</button>
+        <button class="btn btn-primary" onclick="showPanel(8)">1.8 Timeline →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 8: TIMELINE -->
+    <section class="panel" id="panel-8">
+      <div class="panel-header">
+        <div class="panel-tag">1.8</div>
+        <h2>History of AI: Timeline</h2>
+      </div>
+      <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">A brief, select history and future of AI from the early 1900s to the mid-2040s. The history of AI is complex — intertwined with science fiction, robotics, computers, the Internet, and mobile devices. Click any event to expand it.</p>
+
+      <div class="timeline-wrap" id="timelineWrap"></div>
+
+      <a href="https://drive.google.com/file/d/1YgdACQ-0zMD-EYsvFM3oylkQgO_pxbOe/view?usp=drive_link" target="_blank" class="resource-link">📥 Download complete timeline</a>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(7)">← 1.7</button>
+        <button class="btn btn-primary" onclick="showPanel(9)">1.9 Podcast →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 9: PODCAST -->
+    <section class="panel" id="panel-9">
+      <div class="panel-header">
+        <div class="panel-tag">1.9</div>
+        <h2>Deep Dive Podcast: Section 1</h2>
+      </div>
+
+      <div class="podcast-card">
+        <div class="podcast-icon">🎙️</div>
+        <div class="podcast-info">
+          <h3>Deep Dive Podcast — AI Corner, Section 1</h3>
+          <div class="podcast-warn">⚠️ This podcast is 100% AI-generated (Google NotebookLM) and may contain inaccuracies. Listen critically.</div>
+          <p>A Google NotebookLM AI-generated podcast synthesizing the materials in Section 1. Duration: approx. 23:30 min.</p>
+          <a href="https://drive.google.com/file/d/1QZVJA4_3rzvQxxnPSgZ_hZODGd_vX9SB/view?usp=drive_link" target="_blank" class="resource-link" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:white;">📄 Podcast audio transcript</a>
+        </div>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(8)">← 1.8</button>
+        <button class="btn btn-primary" onclick="showPanel(10)">1.10 Readings →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 10: READINGS -->
+    <section class="panel" id="panel-10">
+      <div class="panel-header">
+        <div class="panel-tag">1.10</div>
+        <h2>Readings</h2>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-muted);margin-bottom:12px;font-style:italic;">Generated by prompting <a href="https://web.diffit.me/" target="_blank" style="color:var(--blue);">diffit.me</a></div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:16px;color:var(--navy);">To Read: An Overview of Artificial Intelligence</h3>
+        <div class="reading-text">
+          <p>Artificial intelligence (AI) is a rapidly evolving technology that enables machines to mimic human cognitive functions such as learning, reasoning, and problem-solving. This technology has become increasingly integrated into our daily lives, influencing everything from how we interact with our devices to how businesses operate. AI systems can recognize images, understand spoken language, and even make decisions based on data, showcasing their ability to perform tasks that traditionally required human intelligence.</p>
+          <p>The concept of AI has been around for decades, with its roots tracing back to the mid-20th century. Early developments focused on creating systems that could perform specific tasks, such as playing chess or solving mathematical problems. However, advancements in machine learning and deep learning have propelled AI into new territories, allowing for more complex and autonomous systems. For instance, self-driving cars are a prime example of AI's capabilities, as they can navigate and make decisions without human intervention.</p>
+          <p>One of the most significant breakthroughs in AI has been the rise of generative AI, which can create original content, including text, images, and videos. This technology is built on sophisticated algorithms that learn from vast amounts of data, enabling it to produce outputs that can sometimes be indistinguishable from human-created content. Generative AI has sparked a lot of interest and investment, as it holds the potential to revolutionize industries such as entertainment, marketing, and education.</p>
+          <p>Despite its many advantages, AI also poses challenges and risks. As AI systems become more powerful, there are growing concerns about their ethical implications and the potential for misuse. For example, the ability of AI to manipulate information or create deepfakes raises questions about trust and authenticity in media. Additionally, the automation of jobs through AI technology could lead to significant economic shifts, affecting employment and income distribution.</p>
+          <p>The future of AI is a topic of intense debate among experts. Some believe that we are on the brink of developing human-level AI, which could fundamentally change our society. However, there are also warnings about the unforeseen consequences that such advancements could bring, emphasizing the need for careful consideration and regulation of AI technologies. The conversation surrounding AI is not just for scientists and engineers; it is essential for everyone to engage in discussions about how this technology will shape our world.</p>
+          <p>AI's impact is already evident in various sectors, including healthcare, finance, and transportation. In healthcare, AI systems assist in diagnosing diseases and personalizing treatment plans, while in finance, they help detect fraud and manage investments. These applications demonstrate AI's potential to enhance efficiency and improve outcomes, but they also highlight the importance of ensuring that these systems are designed and implemented responsibly.</p>
+          <p>As we move forward, it is crucial to foster a broader societal engagement with AI. This means involving diverse voices in discussions about its development and use, ensuring that the benefits of AI are shared widely, and addressing the ethical considerations that arise from its deployment. The future of AI holds immense promise, but it requires a collective effort to navigate its challenges and harness its potential for the greater good.</p>
+        </div>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(9)">← 1.9</button>
+        <button class="btn btn-primary" onclick="showPanel(11)">1.11 Sources →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 11: SOURCES -->
+    <section class="panel" id="panel-11">
+      <div class="panel-header">
+        <div class="panel-tag">1.11</div>
+        <h2>Sources and Other Materials</h2>
+      </div>
+
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;letter-spacing:0.05em;text-transform:uppercase;">Video Scripts / Lecture Notes</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:32px;">
+        <a href="https://drive.google.com/file/d/1pqNiWQR4xQFTadeJFdvJRcqW8vCdFYob/view?usp=drive_link" target="_blank" class="resource-link">📄 1.1 AI as an Idea/Concept</a>
+        <a href="https://drive.google.com/file/d/1BkcGovWCFDS0dGLV2sw6w2ig-_X3IOg5/view?usp=drive_link" target="_blank" class="resource-link">📄 1.2 AI as an English Language Word</a>
+        <a href="https://drive.google.com/file/d/1walMBrBF_2Gnwoinp_GcAU-SMYDJfXZ_/view?usp=drive_link" target="_blank" class="resource-link">📄 1.3 Some Key Terms</a>
+        <a href="https://drive.google.com/file/d/144bxIRzG_vMS86v0VOtopsXgGzOJt2UE/view?usp=drive_link" target="_blank" class="resource-link">📄 1.5 AI Metaphors</a>
+        <a href="https://drive.google.com/file/d/1RqL07kX0aUrY-qlwDiif8-VVUXoPy6xP/view?usp=drive_link" target="_blank" class="resource-link">📄 1.6 Generative AI</a>
+        <a href="https://drive.google.com/file/d/1YgdACQ-0zMD-EYsvFM3oylkQgO_pxbOe/view?usp=drive_link" target="_blank" class="resource-link">📄 1.8 History of AI: Timeline</a>
+      </div>
+
+      <div style="background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:28px;font-size:0.85rem;color:var(--text-muted);line-height:1.6;">
+        <strong style="color:var(--text);">Note:</strong> The lecture script drafts/notes were generated by using AI tools for brainstorming (ChatGPT, Gemini, Claude, Google NotebookLM, Perplexity, and Microsoft Copilot). The AI outputs were curated and edited to write the final lecture scripts/notes.
+      </div>
+
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;letter-spacing:0.05em;text-transform:uppercase;">Sources &amp; Background Materials</h3>
+
+      <div class="source-item">
+        <a href="http://dx.doi.org/10.4324/9781003459026-1" target="_blank">Generative AI in Higher Education: The ChatGPT Effect</a>
+        <div class="source-author">Cecilia Ka Yuk, Tom Colloton</div>
+      </div>
+      <div class="source-item">
+        <a href="https://unesdoc.unesco.org/ark:/48223/pf0000385146" target="_blank">ChatGPT and Artificial Intelligence in Higher Education: Quick Start Guide</a>
+        <div class="source-author">UNESCO</div>
+      </div>
+      <div class="source-item">
+        <a href="https://alliedmedia.org/wp-content/uploads/2020/09/peoples-guide-ai.pdf" target="_blank">People's Guide to AI</a>
+        <div class="source-author">Mimi Onuoha, Mother Cyborg (Diana Nucera)</div>
+      </div>
+      <div class="source-item">
+        <a href="https://www.ibm.com/think/topics/artificial-intelligence-types" target="_blank">Understanding the Different Types of Artificial Intelligence</a>
+        <div class="source-author">IBM Data and AI Team</div>
+      </div>
+      <div class="source-item">
+        <a href="https://www.ibm.com/topics/generative-ai" target="_blank">What is Generative AI?</a>
+        <div class="source-author">Cole Stryker, Mark Scapicchio, IBM</div>
+      </div>
+      <div class="source-item">
+        <a href="https://www.nngroup.com/articles/artificial-intelligence-glossary/" target="_blank">Artificial Intelligence: Glossary</a>
+        <div class="source-author">Caleb Sponheim, Nielsen &amp; Norman Group</div>
+      </div>
+      <div class="source-item">
+        <a href="https://leonfurze.com/2024/07/19/ai-metaphors-we-live-by-the-language-of-artificial-intelligence/" target="_blank">AI Metaphors We Live By: The Language of Artificial Intelligence</a>
+        <div class="source-author">Leon Furze</div>
+      </div>
+      <div class="source-item">
+        <a href="https://www.politybooks.com/bookdetail?book_slug=communicative-ai-a-critical-introduction-to-large-language-models--9781509567591" target="_blank">Communicative AI: A Critical Introduction to Large Language Models</a>
+        <div class="source-author">Mark Coeckelbergh, David J. Gunkel</div>
+      </div>
+
+      <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-muted);text-align:center;">
+        Module 1 · <a href="https://lab.fi/en" target="_blank" style="color:var(--blue);">LAB University of Applied Sciences</a> · Compiled by <a href="https://www.linkedin.com/in/hagu1/" target="_blank" style="color:var(--blue);">Hamid Guedra</a>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(10)">← 1.10</button>
+        <button class="btn btn-primary" onclick="showPanel(0)">↑ Back to Top</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ── NAVIGATION ──
+const TOTAL_PANELS = 12;
+let visitedPanels = new Set([0]);
+
+function showPanel(n) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n2 => n2.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.getElementById('nav-' + n).classList.add('active');
+  visitedPanels.add(n);
+  document.getElementById('progressBar').style.width = (visitedPanels.size / TOTAL_PANELS * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── FLASHCARDS ──
+const flashcards = [
+  { term: "Algorithm", def: "An algorithm is a set of step-by-step instructions that tell a computer how to perform a task or solve a problem. It is the fundamental building block of how computers process information and make decisions." },
+  { term: "Artificial Intelligence (AI)", def: "AI refers to computer systems designed to mimic human intelligence. These systems can perform certain tasks that typically require human-like cognitive abilities, such as learning, problem-solving, language understanding, visual perception, and decision-making." },
+  { term: "Chatbot", def: "A chatbot is a computer program that simulates conversations with human users. Powered by AI and Natural Language Processing, chatbots can answer questions, provide information, and complete tasks, making them useful in areas like customer service and technical support." },
+  { term: "Context Window", def: "In language models, the context window refers to the amount of preceding text the model can \"remember\" and use to understand the current input. A larger context window allows the model to maintain more coherent and contextually relevant responses over longer conversations or documents. Synonym: attention span." },
+  { term: "Generative AI", def: "Generative AI (GenAI) refers to AI systems capable of creating content, rather than just analyzing existing data. This includes generating text, images, speech, and music, even videos. Examples include ChatGPT for text generation, DALL-E for image creation, or Synthesia for video generation." },
+  { term: "Guardrails", def: "Guardrails in AI are safeguards implemented during the development and deployment of AI systems. They aim to prevent the generation of harmful, unethical, or inappropriate content, ensuring responsible AI development and use. Synonyms: AI safeguards or AI safety measures." },
+  { term: "Large Language Model (LLM)", def: "A Large Language Model (LLM) is an AI system trained on massive datasets of text, enabling it to understand and generate human-like text. LLMs can perform tasks such as language translation, creative writing, and answering complex questions. ChatGPT is an LLM." },
+  { term: "Large Image Model (LIM)", def: "Similar to LLMs but focused on visual data, LIMs are trained on vast amounts of image data. They excel at tasks like image generation, classification, and content understanding, with applications ranging from facial recognition to medical imaging analysis." },
+  { term: "Machine Learning", def: "Machine learning involves algorithms that improve through experience. Instead of being programmed with every rule, these systems learn patterns from data, enabling them to make predictions or decisions on new, unseen data." },
+  { term: "Multimodal AI", def: "Multimodal AI systems can process information from multiple sources or \"modes,\" such as text, images, and audio. This approach allows for a more comprehensive understanding of complex scenarios, similar to how humans integrate information from multiple senses." },
+  { term: "Natural Language Processing (NLP)", def: "Natural Language Processing (NLP) is a branch of AI focused on enabling computers to understand, interpret, and generate human language. It powers applications like machine translation and speech recognition." },
+  { term: "Neural Network", def: "Inspired by the human brain, a neural network is a type of machine learning model consisting of interconnected nodes organized in layers. These networks learn by adjusting the strengths of connections between the nodes, allowing them to recognize patterns and make decisions." },
+  { term: "Prompting", def: "In the context of AI interaction, particularly with language models, prompting refers to providing the AI system with an input, question, or task to guide the output the system generates. The quality and structure of the user's prompt can significantly influence the AI's response." },
+  { term: "Prompt Structure", def: "Prompt structure refers to the organization and format of an AI prompt. It includes elements like the order of information, use of examples, and specificity of instructions, all of which can impact the quality and relevance of the AI's output. Related to prompt engineering or prompt design." },
+  { term: "Framing", def: "In the context of AI interaction, framing involves providing clear context and background information in a prompt. This helps the AI system understand the scope and requirements of the task, leading to more relevant and accurate responses. Synonyms: (prompt) contextualization or (prompt) priming." },
+  { term: "Tone of Voice", def: "In the context of AI interaction, specifying a desired tone in a prompt can guide the AI system's response style. This could range from formal to casual, technical to simple, or serious to humorous, helping to tailor the AI system's communication to the user's needs." },
+  { term: "Supervised Learning", def: "A type of machine learning where an AI system is trained on a labelled dataset. The AI system learns to make predictions by comparing its outputs with the correct labels, gradually improving its accuracy." },
+  { term: "Unsupervised Learning", def: "In unsupervised learning, an AI system is given unlabeled data and must find patterns or structures on its own. This approach is useful for discovering hidden patterns or grouping similar data points." },
+  { term: "Reinforcement Learning", def: "A type of machine learning where an AI system learns by interacting with an environment. The AI system receives rewards or penalties based on its actions, learning over time to maximize cumulative rewards." },
+  { term: "Transfer Learning", def: "Transfer learning involves applying knowledge gained from one task to a different but related task. This approach allows AI systems to leverage pre-existing knowledge, saving time and resources in training for new applications." },
+  { term: "Deepfake", def: "A deepfake is media, typically video or audio, that is artificially generated or manipulated using AI techniques to create realistic but fake content. It often involves superimposing a person's face, voice, or likeness onto another in video or audio footage." },
+  { term: "Synthetic Media", def: "Synthetic media refers to digital content that is artificially generated or altered using AI systems, machine learning, or other computational techniques. This can include computer-generated images, videos, audio, and text, all of which closely mimic real media." },
+  { term: "Alignment Problem", def: "The alignment problem refers to the challenge of ensuring that AI systems act in ways that align with human values and ethical standards. It involves designing AI systems that pursue goals consistent with those of their human creators." },
+  { term: "Algorithmic Bias", def: "Algorithmic bias occurs when an AI system produces unfair or discriminatory outputs that affect certain groups. This bias often stems from imbalances in training data, flawed algorithmic design, or the unconscious biases of AI developers." }
+];
+
+let fcIndex = 0;
+let fcOrder = [...Array(flashcards.length).keys()];
+let isFlipped = false;
+
+function updateFlashcard() {
+  const card = flashcards[fcOrder[fcIndex]];
+  document.getElementById('fcTerm').textContent = card.term;
+  document.getElementById('fcTermBack').textContent = card.term;
+  document.getElementById('fcDefinition').textContent = card.def;
+  document.getElementById('fcCounter').textContent = (fcIndex + 1) + ' / ' + flashcards.length;
+  const fc = document.getElementById('flashcard');
+  isFlipped = false;
+  fc.classList.remove('flipped');
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+  fcIndex = (fcIndex + 1) % flashcards.length;
+  updateFlashcard();
+}
+
+function prevCard() {
+  fcIndex = (fcIndex - 1 + flashcards.length) % flashcards.length;
+  updateFlashcard();
+}
+
+function shuffleCards() {
+  for (let i = fcOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]];
+  }
+  fcIndex = 0;
+  updateFlashcard();
+}
+
+// ── DRAG AND DROP ──
+const dndItems = [
+  { term: "An algorithm", def: "A precise set of step-by-step instructions that tell a computer how to perform a task or solve a problem. It's the fundamental building block of how computers process information and make decisions." },
+  { term: "Artificial Intelligence (AI)", def: "These systems can perform tasks that typically require human cognitive abilities, such as learning, problem-solving, language understanding, visual perception, and decision-making." },
+  { term: "Chatbot", def: "A computer program designed to simulate conversation with human users. Powered by AI and Natural Language Processing, these programs can understand questions, provide information, and complete tasks, making them valuable in customer service." },
+  { term: "Machine Learning", def: "A subset of AI that involves algorithms that improve through experience. Instead of being explicitly programmed with every rule, these systems learn patterns from data, enabling them to make predictions or decisions on new, unseen data." },
+  { term: "Generative AI", def: "AI systems capable of creating new content, rather than just analyzing existing data. This includes generating text, images, music, and even videos." },
+  { term: "Guardrails", def: "Safeguards implemented during the development and deployment of AI systems. They aim to prevent the generation of harmful, unethical, or inappropriate content, ensuring responsible AI development and use." },
+  { term: "Large Language Model (LLM)", def: "An AI system trained on massive datasets of text, enabling it to understand and generate human-like text. These systems can perform tasks such as language translation, creative writing, and answering complex questions." },
+  { term: "Neural Network", def: "Inspired by the human brain, this is a type of machine learning model consisting of interconnected nodes organized in layers. These networks learn by adjusting the strengths of connections between nodes, allowing them to recognize patterns and make decisions." },
+  { term: "Prompting", def: "This refers to providing the AI system with an input, question, or task to guide its output. The quality and structure of the input can significantly influence the AI's response." },
+  { term: "Supervised Learning", def: "A type of machine learning where the AI is trained on a labeled dataset. The AI learns to make predictions by comparing its outputs with the correct labels, gradually improving its accuracy." },
+  { term: "Unsupervised Learning", def: "A type of machine learning where the AI is given unlabeled data and must find patterns or structures on its own. This approach is useful for discovering hidden patterns or grouping similar data points." }
+];
+
+let draggedTerm = null;
+
+function buildDnD() {
+  const pool = document.getElementById('termsPool');
+  const list = document.getElementById('dndList');
+  pool.innerHTML = '';
+  list.innerHTML = '';
+
+  // Shuffle terms for pool display
+  const shuffled = [...dndItems].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const span = document.createElement('span');
+    span.className = 'dnd-term';
+    span.textContent = item.term;
+    span.draggable = true;
+    span.dataset.term = item.term;
+    span.addEventListener('dragstart', e => {
+      draggedTerm = item.term;
+      span.classList.add('dragging');
+    });
+    span.addEventListener('dragend', () => span.classList.remove('dragging'));
+    // Touch support
+    span.addEventListener('touchstart', touchStart, { passive: true });
+    span.addEventListener('touchmove', touchMove, { passive: false });
+    span.addEventListener('touchend', touchEnd);
+    pool.appendChild(span);
+  });
+
+  dndItems.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'dnd-item';
+    row.innerHTML = `
+      <span class="dnd-num">${i + 1}</span>
+      <div class="dnd-def">${item.def}</div>
+      <div class="dnd-drop" data-answer="${item.term}" ondragover="e => e.preventDefault()" ondrop="dropTerm(event, this)">
+        <span style="font-size:11px;opacity:0.6;">Drop here</span>
+      </div>`;
+    row.querySelector('.dnd-drop').addEventListener('dragover', e => {
+      e.preventDefault();
+      row.querySelector('.dnd-drop').classList.add('dragover');
+    });
+    row.querySelector('.dnd-drop').addEventListener('dragleave', () => {
+      row.querySelector('.dnd-drop').classList.remove('dragover');
+    });
+    row.querySelector('.dnd-drop').addEventListener('drop', e => {
+      e.preventDefault();
+      dropTerm(e, row.querySelector('.dnd-drop'));
+    });
+    list.appendChild(row);
+  });
+}
+
+function dropTerm(e, dropZone) {
+  if (!draggedTerm) return;
+  dropZone.classList.remove('dragover', 'correct', 'incorrect');
+
+  // If there was already a term here, put it back in pool
+  const existing = dropZone.querySelector('.placed-term');
+  if (existing) {
+    returnTermToPool(existing.textContent);
+    dropZone.innerHTML = '<span style="font-size:11px;opacity:0.6;">Drop here</span>';
+  }
+
+  const placed = document.createElement('span');
+  placed.className = 'placed-term';
+  placed.textContent = draggedTerm;
+  placed.addEventListener('click', () => {
+    returnTermToPool(draggedTerm);
+    dropZone.innerHTML = '<span style="font-size:11px;opacity:0.6;">Drop here</span>';
+    dropZone.classList.remove('correct', 'incorrect');
+  });
+  dropZone.innerHTML = '';
+  dropZone.appendChild(placed);
+
+  // Hide from pool
+  document.querySelectorAll('.dnd-term').forEach(t => {
+    if (t.dataset.term === draggedTerm && !t.classList.contains('placed')) {
+      t.classList.add('placed');
+    }
+  });
+  draggedTerm = null;
+}
+
+function returnTermToPool(term) {
+  document.querySelectorAll('.dnd-term').forEach(t => {
+    if (t.dataset.term === term) t.classList.remove('placed');
+  });
+}
+
+function checkDnD() {
+  let score = 0;
+  document.querySelectorAll('.dnd-drop').forEach(drop => {
+    const placed = drop.querySelector('.placed-term');
+    if (placed) {
+      const correct = placed.textContent === drop.dataset.answer;
+      drop.classList.remove('correct', 'incorrect');
+      drop.classList.add(correct ? 'correct' : 'incorrect');
+      if (correct) score++;
+    }
+  });
+  const scoreEl = document.getElementById('dndScore');
+  scoreEl.style.display = 'flex';
+  document.getElementById('dndScoreNum').textContent = score + '/11';
+  const msgs = ['Study more 📚', 'Pretty good!', 'Good job! 👍', 'Very good! 🌟', 'Excellent! 🎉'];
+  const idx = Math.min(Math.floor(score / 11 * 5), 4);
+  document.getElementById('dndScoreMsg').textContent = msgs[idx];
+}
+
+function showSolution() {
+  dndItems.forEach(item => {
+    document.querySelectorAll('.dnd-drop').forEach(drop => {
+      if (drop.dataset.answer === item.term) {
+        drop.classList.remove('correct', 'incorrect');
+        const placed = document.createElement('span');
+        placed.className = 'placed-term';
+        placed.textContent = item.term;
+        drop.innerHTML = '';
+        drop.appendChild(placed);
+        drop.classList.add('correct');
+      }
+    });
+  });
+  document.querySelectorAll('.dnd-term').forEach(t => t.classList.add('placed'));
+  document.getElementById('dndScore').style.display = 'flex';
+  document.getElementById('dndScoreNum').textContent = '11/11';
+  document.getElementById('dndScoreMsg').textContent = 'Solution shown ✓';
+}
+
+function resetDnD() {
+  document.getElementById('dndScore').style.display = 'none';
+  buildDnD();
+}
+
+// Touch drag support
+let touchItem = null, touchClone = null;
+function touchStart(e) {
+  touchItem = e.currentTarget;
+  draggedTerm = touchItem.dataset.term;
+  touchClone = touchItem.cloneNode(true);
+  touchClone.style.cssText = 'position:fixed;opacity:0.8;pointer-events:none;z-index:9999;';
+  document.body.appendChild(touchClone);
+}
+function touchMove(e) {
+  e.preventDefault();
+  if (!touchClone) return;
+  const t = e.touches[0];
+  touchClone.style.left = (t.clientX - 30) + 'px';
+  touchClone.style.top = (t.clientY - 15) + 'px';
+}
+function touchEnd(e) {
+  if (touchClone) { touchClone.remove(); touchClone = null; }
+  if (!draggedTerm) return;
+  const t = e.changedTouches[0];
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  const drop = el ? el.closest('.dnd-drop') : null;
+  if (drop) dropTerm(e, drop);
+  draggedTerm = null;
+}
+
+// ── TIMELINE ──
+const timelineData = [
+  { year: "1920", headline: "First Use of the Word \"Robot\"", img: "https://upload.wikimedia.org/wikipedia/commons/a/ad/Rosumovi_Univerz%C3%A1ln%C3%AD_Roboti_1920.jpg", credit: "Rossum's Universal Robots. Public domain. Wikimedia Commons.", text: "The word <em>\"robot\"</em>, derived from a Slavonic word for <em>\"forced labour\"</em> or <em>\"slave\"</em>, was first used in the Czech playwright Karel Čapek's play <em>R.U.R.</em> or <em>Rossum's Universal Robots</em>. The play is about an inventor who creates humanlike machines; eventually these machines revolt and begin to dominate humans. Whether robots, AI, or something else, the idea that technology poses a threat and eventually enslaves humanity is one of the most common themes in science fiction." },
+  { year: "1940", headline: "First Digital Computers", img: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Colossus.jpg", credit: "The Colossus. Public Domain. Wikimedia Commons.", text: "The first digital computers were built around the mid-1940s. Two often-cited examples are <em>The Colossus</em> (Mark I), built in England in 1943, and <em>ENIAC</em> (Electronic Numerical Integrator and Computer), built in the US in 1945. Both were used for military purposes during World War II." },
+  { year: "1942", headline: "Three Laws of Robotics", img: "https://upload.wikimedia.org/wikipedia/commons/3/34/Isaac.Asimov01.jpg", credit: "Isaac Asimov. Public domain. Wikimedia Commons.", text: "Science fiction writer Isaac Asimov created the so-called <em>Three Laws of Robotics</em> in a 1942 short story titled <em>Runaround</em>. The three rules are: (1) a robot may not injure a human being or, through inaction, allow a human being to come to harm; (2) a robot must obey the orders given to it by human beings; (3) a robot must protect its own existence." },
+  { year: "1950", headline: "Alan Turing: Computing Machinery and Intelligence", img: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Alan_Turing_%281912-1954%29_in_1936_at_Princeton_University_%28b%26w%29.jpg", credit: "Alan Turing. Public domain. Wikimedia Commons.", text: "Alan Turing's paper <em>Computing Machinery and Intelligence</em> was published in <em>Mind</em>, an academic journal. The paper discusses the possibility of machines that could think, and introduced the famous question: <em>\"Can machines think?\"</em> Turing proposed what became known as the Turing Test as a way to evaluate machine intelligence." },
+  { year: "1956", headline: "Concept of AI Introduced", text: "The concept of <em>Artificial Intelligence</em> was first introduced in 1956 at Dartmouth College in the US during the Dartmouth Summer Research Project on Artificial Intelligence. John McCarthy, a professor of mathematics at Dartmouth, stated the conference's objective: <em>\"to make machines use language, form abstractions and concepts, solve kinds of problems now reserved for humans, and improve themselves.\"</em>" },
+  { year: "1966", headline: "First Chatbot: Eliza", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/ELIZA_conversation.png", credit: "Conversation with Eliza. Public domain. Wikimedia Commons.", text: "The first ever chatbot was created in 1966 by computer scientist Joseph Weizenbaum at MIT. Weizenbaum gave the bot the role of a psychotherapist, and the bot generated answers to the user's input based on a simple pattern-matching algorithm. Despite its simplicity, many users found the interaction surprisingly convincing." },
+  { year: "1971", headline: "First Microprocessor", img: "https://upload.wikimedia.org/wikipedia/commons/3/30/Intel_4004_open.jpg", credit: "Intel 4004. The Science Museum. CC Attribution 4.0 International. Wikimedia Commons.", text: "Microprocessors are very small electronic devices essential to modern computers. The first one was Intel's Intel 4004. Inexpensive microprocessors made it possible to develop microcomputers, also called personal computers (PCs), which are small but powerful enough for home use." },
+  { year: "1974", headline: "First AI Winter", text: "The term <em>AI Winter</em> was first coined in 1984. It refers to periods when interest, funding, or progress in artificial intelligence research declined significantly. The first AI winter began around 1974 when early AI promises went unfulfilled and funding dried up." },
+  { year: "1980", headline: "John Searle: The Chinese Room", img: "https://upload.wikimedia.org/wikipedia/commons/b/bc/Searle_%282%29.jpg", credit: "John Searle. Leon Saudanha. CC Attribution-Share Alike 3.0 Unported. Wikimedia Commons.", text: "Philosopher John Searle distinguished between <em>Strong AI</em> and <em>Weak AI</em>. His <em>Chinese Room Argument</em> imagines a person who does not know Chinese sitting in a room with a large rulebook. Instructions come in Chinese; the person follows the rulebook to produce Chinese output. The person appears to understand Chinese, but actually understands nothing — they are merely following rules. Searle used this to argue that computers, which follow syntactic rules, cannot truly understand meaning." },
+  { year: "1987", headline: "Second AI Winter", text: "A second AI winter occurred from the late 1980s into the 1990s, as expert systems that had been heavily promoted proved expensive to maintain and unable to meet high expectations. Funding and interest again declined significantly." },
+  { year: "1991", headline: "First Web Page", img: "https://upload.wikimedia.org/wikipedia/commons/b/b2/WWW_logo_by_Robert_Cailliau.svg", credit: "WWW historical logo. Public domain. Wikimedia Commons.", text: "The first-ever web page went live on the Internet in 1991. It was published by Tim Berners-Lee, a computer scientist and the inventor of the World Wide Web. The Internet predates the web by many years, but Berners-Lee's invention of HTML and HTTP made the web accessible to the general public." },
+  { year: "1997", headline: "Deep Blue Defeats Kasparov", img: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Say_hello_to_Deep_Blue_%282586059148%29.jpg", credit: "Deep Blue. Erik Pitti. CC Attribution 2.0 Generic. Wikimedia Commons.", text: "Deep Blue, a chess-playing computer system developed by IBM, managed to defeat world chess champion Garry Kasparov in 1997. Chess-playing computers had existed since the 1950s, but IBM's Deep Blue was a massive supercomputer that could calculate over 200 million positions per second. The match was widely reported as a landmark moment for AI." },
+  { year: "2007", headline: "First iPhone", img: "https://upload.wikimedia.org/wikipedia/commons/c/c7/IPhone_First_Generation_%28cropped%29.jpg", credit: "First iPhone. Berkeley, C. CC Attribution-Share Alike 2.0 Generic. Wikimedia Commons.", text: "Apple introduced the first iPhone in 2007. Smartphones brought AI into everyday life — virtual assistants, predictive text, facial recognition, and recommendation algorithms became part of daily routines for billions of people. The mobile era dramatically accelerated the deployment of AI technologies." },
+  { year: "2011", headline: "Apple Siri", img: "https://upload.wikimedia.org/wikipedia/commons/d/de/Logo_Apple_Siri_iOS_2024.svg", credit: "Siri Logo. Public domain. Wikimedia Commons.", text: "Apple introduced Siri in 2011 as a feature of its iPhone 4S. Siri was the first widely available virtual assistant on a smartphone, originally created by Stanford Research Institute researchers Adam Cheyer, Tom Gruber, and Dag Kittlaus. It marked the beginning of mainstream voice-based AI assistants." },
+  { year: "2016", headline: "AlphaGo Defeats Lee Sedol", img: "https://upload.wikimedia.org/wikipedia/commons/3/32/Lee_Sedol_%28B%29_vs_AlphaGo_%28W%29_-_Game_1_-_BW.svg", credit: "AlphaGo vs Lee Sedol. Wesalius. CC Attribution-Share Alike 4.0 International. Wikimedia Commons.", text: "AlphaGo, developed by Google DeepMind, defeated world Go champion Lee Sedol in 2016. Go is a board game considered far more complex than chess, with more possible positions than atoms in the observable universe. AlphaGo's victory was a major milestone demonstrating AI's ability to master complex strategic games." },
+  { year: "2022", headline: "OpenAI Releases ChatGPT", img: "https://upload.wikimedia.org/wikipedia/commons/1/13/ChatGPT-Logo.png", credit: "OpenAI's logo. Johnlearningwiki. CC Attribution-Share Alike 4.0 International. Wikimedia Commons.", text: "OpenAI launched its generative AI chatbot, ChatGPT, in November 2022. Already within two months after its release, ChatGPT had over 100 million users. Compare this with TikTok and Instagram — it took TikTok 9 months and Instagram about 2.5 years to reach 100 million users. ChatGPT's release is widely considered to have marked a new era in AI accessibility and public awareness." },
+  { year: "2045", headline: "Singularity (Hypothetical)", text: "Some techno-optimists and futurists have claimed that AI will supersede human intelligence — the so-called <em>Singularity</em> — and that humans and computers will eventually merge to become posthuman beings. Predictions like those of futurist Ray Kurzweil place this event around 2045. These claims are highly speculative and contested; many AI researchers consider them implausible or meaningless." }
+];
+
+function buildTimeline() {
+  const wrap = document.getElementById('timelineWrap');
+  // Sort by year
+  const sorted = [...timelineData].sort((a, b) => parseInt(a.year) - parseInt(b.year));
+  sorted.forEach((ev, i) => {
+    const div = document.createElement('div');
+    div.className = 't-event';
+    div.innerHTML = `
+      <div class="t-dot"></div>
+      <div class="t-header" onclick="toggleTimeline(${i})">
+        <span class="t-year">${ev.year}</span>
+        <span class="t-headline">${ev.headline}</span>
+        <span class="t-chevron">▶</span>
+      </div>
+      <div class="t-body">
+        ${ev.img ? `<img class="t-img" src="${ev.img}" alt="${ev.headline}" onerror="this.style.display='none'">` : ''}
+        <p>${ev.text}</p>
+        ${ev.credit ? `<div class="t-credit">Image: ${ev.credit}</div>` : ''}
+      </div>`;
+    div.id = 't-event-' + i;
+    wrap.appendChild(div);
+  });
+}
+
+function toggleTimeline(i) {
+  const ev = document.getElementById('t-event-' + i);
+  ev.classList.toggle('open');
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  buildDnD();
+  buildTimeline();
+  updateFlashcard();
+});
+</script>
+
+</body>
+</html>
