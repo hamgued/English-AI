@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English &amp; AI — Course Modules</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:       #0e1f3b;
+    --navy-mid:   #1a3461;
+    --blue:       #1768c4;
+    --blue-light: #3d8ef0;
+    --gold:       #e8a020;
+    --gold-light: #f5c842;
+    --cream:      #faf7f2;
+    --white:      #ffffff;
+    --text:       #1a1a2e;
+    --text-muted: #5a6070;
+    --border:     #ddd8cf;
+    --radius:     10px;
+    --shadow:     0 4px 20px rgba(14,31,59,0.12);
+    --shadow-lg:  0 8px 40px rgba(14,31,59,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .lab-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    border-right: 1px solid rgba(255,255,255,0.2);
+    padding-right: 16px;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+
+  .lab-logo a { color: inherit; text-decoration: none; }
+  .lab-logo a:hover { color: var(--gold-light); }
+
+  .header-title { flex: 1; }
+
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: white;
+    line-height: 1.2;
+  }
+
+  .header-title .subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-author {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .header-author a {
+    color: var(--gold-light);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .header-author a:hover { text-decoration: underline; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 50%, rgba(232,160,32,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 70% at 80% 30%, rgba(61,142,240,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 1px;
+    background: var(--gold-light);
+    opacity: 0.5;
+  }
+
+  .hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: white;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h2 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold-light);
+  }
+
+  .hero p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ── MAIN ── */
+  main {
+    flex: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 4rem 2rem 5rem;
+  }
+
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.6rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── MODULE CARDS ── */
+  .module-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .module-card {
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 1.8rem 2rem;
+    text-decoration: none;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .module-card:last-child { border-bottom: none; }
+
+  .module-card:hover {
+    background: #f5f8ff;
+    box-shadow: inset 4px 0 0 var(--blue);
+  }
+
+  .module-card.soon {
+    opacity: 0.55;
+    pointer-events: none;
+    background: var(--cream);
+  }
+
+  /* Number badge */
+  .module-num-badge {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--navy);
+    background: var(--cream);
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+  }
+
+  .module-card:hover .module-num-badge {
+    border-color: var(--blue);
+    background: var(--blue);
+    color: white;
+  }
+
+  .module-info { flex: 1; }
+
+  .module-meta {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .module-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .module-card:hover .module-title { color: var(--blue); }
+
+  .module-desc {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .module-tags {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    background: rgba(23,104,196,0.08);
+    padding: 0.2em 0.6em;
+    border-radius: 4px;
+  }
+
+  .module-card.soon .tag {
+    color: var(--text-muted);
+    background: rgba(90,96,112,0.08);
+  }
+
+  .soon-badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--text-muted);
+    padding: 0.25em 0.65em;
+    border-radius: 4px;
+  }
+
+  .module-arrow {
+    font-size: 1.1rem;
+    color: var(--border);
+    transition: color 0.2s, transform 0.2s;
+    padding-left: 0.5rem;
+  }
+
+  .module-card:hover .module-arrow {
+    color: var(--blue);
+    transform: translateX(4px);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    padding: 1.8rem 2rem;
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  footer a {
+    color: var(--gold-light);
+    text-decoration: none;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-inner  { animation: fadeUp 0.55s ease both 0.1s; }
+  .section-label { animation: fadeUp 0.4s ease both 0.3s; }
+  .module-card:nth-child(1) { animation: fadeUp 0.4s ease both 0.38s; }
+  .module-card:nth-child(2) { animation: fadeUp 0.4s ease both 0.46s; }
+  .module-card:nth-child(3) { animation: fadeUp 0.4s ease both 0.54s; }
+
+  @media (max-width: 600px) {
+    .header-inner { padding: 12px 16px; }
+    .hero { padding: 3rem 1.5rem 2.5rem; }
+    main { padding: 2.5rem 1rem 3rem; }
+    .module-card { padding: 1.4rem 1.2rem; gap: 1rem; }
+    .module-num-badge { width: 42px; height: 42px; min-width: 42px; font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="lab-logo">
+      <a href="https://lab.fi/en" target="_blank" rel="noopener">LAB University</a>
+    </div>
+    <div class="header-title">
+      <h1>English &amp; AI</h1>
+      <div class="subtitle">Course Module Hub</div>
+    </div>
+    <div class="header-author">
+      Designed by<br>
+      <a href="https://www.linkedin.com/in/hagu1/" target="_blank" rel="noopener">Hamid Guedra</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Course Modules</div>
+    <h2>English &amp; <em>AI</em></h2>
+    <p>An introductory course exploring artificial intelligence — what it is, how it works, and what it means for language, writing, and communication.</p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main>
+  <div class="section-label">Select a module to begin</div>
+
+  <div class="module-list">
+
+    <!-- Module 1 — live -->
+    <a class="module-card" href="module1-ai-introduction.html">
+      <div class="module-num-badge">1</div>
+      <div class="module-info">
+        <div class="module-meta">Module 1</div>
+        <div class="module-title">AI Basics</div>
+        <div class="module-desc">What is artificial intelligence? Key concepts, a brief history, and how AI systems work — no technical background required.</div>
+        <div class="module-tags">
+          <span class="tag">Foundations</span>
+          <span class="tag">History</span>
+          <span class="tag">Concepts</span>
+        </div>
+      </div>
+      <div class="module-arrow">→</div>
+    </a>
+
+    <!-- Module 2 — coming soon -->
+    <div class="module-card soon">
+      <div class="module-num-badge">2</div>
+      <div class="module-info">
+        <div class="module-meta">Module 2</div>
+        <div class="module-title">AI Ethics &nbsp;<span class="soon-badge">Coming soon</span></div>
+        <div class="module-desc">Bias, fairness, privacy, and the social implications of AI — developing a critical and informed perspective.</div>
+        <div class="module-tags">
+          <span class="tag">Ethics</span>
+          <span class="tag">Critical Thinking</span>
+        </div>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+
+    <!-- Module 3 — coming soon -->
+    <div class="module-card soon">
+      <div class="module-num-badge">3</div>
+      <div class="module-info">
+        <div class="module-meta">Module 3</div>
+        <div class="module-title">AI Writing &nbsp;<span class="soon-badge">Coming soon</span></div>
+        <div class="module-desc">Practical strategies for using AI tools in academic and professional writing — responsibly and effectively.</div>
+        <div class="module-tags">
+          <span class="tag">Writing</span>
+          <span class="tag">Practice</span>
+        </div>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    &copy; <span id="yr"></span>
+    <a href="https://www.linkedin.com/in/hagu1/" target="_blank" rel="noopener">Hamid Guedra</a>
+    &nbsp;·&nbsp;
+    <a href="https://lab.fi/en" target="_blank" rel="noopener">LAB University of Applied Sciences</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
