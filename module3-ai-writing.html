@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 — AI Writing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0e1f3b;
+    --navy-mid: #1a3461;
+    --blue: #1768c4;
+    --blue-light: #3d8ef0;
+    --gold: #e8a020;
+    --gold-light: #f5c842;
+    --cream: #faf7f2;
+    --white: #ffffff;
+    --text: #1a1a2e;
+    --text-muted: #5a6070;
+    --border: #ddd8cf;
+    --success: #2d8a4e;
+    --error: #c0392b;
+    --radius: 10px;
+    --shadow: 0 4px 20px rgba(14,31,59,0.12);
+    --shadow-lg: 0 8px 40px rgba(14,31,59,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .lab-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    border-right: 1px solid rgba(255,255,255,0.2);
+    padding-right: 16px;
+    margin-right: 4px;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+  .lab-logo a { color: inherit; text-decoration: none; }
+  .lab-logo a:hover { color: var(--gold-light); }
+  .header-title { flex: 1; }
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: white;
+    line-height: 1.2;
+  }
+  .header-author {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .header-author a { color: var(--gold-light); text-decoration: none; font-weight: 500; }
+  .header-author a:hover { text-decoration: underline; }
+  .progress-bar-wrap { background: rgba(255,255,255,0.08); height: 3px; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); width: 0%; transition: width 0.5s ease; }
+
+  /* LAYOUT */
+  .main-layout { display: flex; flex: 1; max-width: 1400px; margin: 0 auto; width: 100%; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px; min-width: 260px;
+    background: white;
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .sidebar-section {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 20px 6px;
+    font-weight: 600;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.3;
+  }
+  .nav-item:hover { background: var(--cream); color: var(--blue); }
+  .nav-item.active { background: #eef4fd; color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+  .nav-num { font-size: 10px; color: var(--text-muted); min-width: 20px; font-weight: 600; }
+  .nav-item.active .nav-num { color: var(--blue); }
+
+  /* CONTENT */
+  .content-area { flex: 1; padding: 40px 48px; max-width: 880px; min-width: 0; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .panel-header { margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .panel-tag { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); font-weight: 600; margin-bottom: 8px; }
+  .panel-header h2 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--navy); line-height: 1.2; }
+
+  /* INTRO HERO */
+  .intro-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3461 60%, #1e4080 100%);
+    border-radius: var(--radius);
+    padding: 40px;
+    color: white;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(232,160,32,0.12);
+  }
+  .intro-hero h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 12px; position: relative; }
+  .intro-hero ul { margin-left: 18px; margin-top: 8px; position: relative; }
+  .intro-hero li { font-size: 0.92rem; line-height: 1.7; opacity: 0.85; }
+
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+  .toc-card {
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .toc-card:hover { border-color: var(--blue); box-shadow: var(--shadow); transform: translateY(-1px); }
+  .toc-card-num { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; color: var(--blue); background: #eef4fd; border-radius: 4px; padding: 2px 7px; min-width: fit-content; margin-top: 2px; }
+  .toc-card-title { font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 500; color: var(--text); line-height: 1.4; }
+  .toc-card-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* VIDEO */
+  .video-wrap { background: #000; border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow-lg); aspect-ratio: 16/9; }
+  .video-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  /* BUTTONS */
+  .btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: var(--navy-mid); }
+  .btn-secondary { background: white; border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { background: var(--cream); }
+
+  /* RESOURCE LINK */
+  .resource-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; background: white; border: 1px solid var(--border); border-radius: 6px;
+    color: var(--blue); text-decoration: none;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    transition: all 0.2s; margin-top: 12px; margin-right: 8px;
+  }
+  .resource-link:hover { background: #eef4fd; border-color: var(--blue); }
+
+  /* WRITING PROCESS STAGES */
+  .stages-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 28px;
+  }
+  .stage-row {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    background: white;
+    overflow: hidden;
+  }
+  .stage-row:first-child { border-radius: 8px 8px 0 0; }
+  .stage-row:last-child { border-radius: 0 0 8px 8px; border-bottom: 1px solid var(--border); }
+  .stage-num {
+    width: 48px; min-width: 48px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: white;
+  }
+  .stage-body { padding: 14px 18px; flex: 1; }
+  .stage-name { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .stage-desc { font-size: 0.85rem; line-height: 1.6; color: var(--text-muted); }
+
+  /* PROMPTING TECHNIQUES */
+  .technique-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+  .technique-card {
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 18px 20px; display: flex; gap: 16px; align-items: flex-start;
+  }
+  .technique-badge {
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: white; border-radius: 6px; padding: 5px 10px;
+    min-width: fit-content; line-height: 1.3; text-align: center;
+  }
+  .technique-name { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+  .technique-def { font-size: 0.88rem; line-height: 1.6; color: var(--text); margin-bottom: 4px; }
+  .technique-example { font-size: 0.82rem; font-style: italic; color: var(--text-muted); border-left: 3px solid var(--border); padding-left: 10px; margin-top: 8px; }
+
+  /* DRAG AND DROP */
+  .dnd-instructions {
+    background: #fff8ec; border: 1px solid #f0c060; border-radius: 8px;
+    padding: 14px 18px; font-size: 0.88rem; margin-bottom: 24px;
+  }
+  .dnd-terms-pool {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px;
+    min-height: 50px; padding: 14px;
+    background: white; border: 2px dashed var(--border); border-radius: var(--radius);
+  }
+  .dnd-term {
+    padding: 8px 16px; background: var(--navy); color: white;
+    border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: grab; user-select: none; transition: all 0.2s; white-space: nowrap;
+  }
+  .dnd-term:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(23,104,196,0.3); }
+  .dnd-term.dragging { opacity: 0.4; cursor: grabbing; }
+  .dnd-term.placed { display: none; }
+  .dnd-list { display: flex; flex-direction: column; gap: 12px; }
+  .dnd-item {
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; display: flex; gap: 14px; align-items: center;
+  }
+  .dnd-num { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; color: var(--blue); min-width: 18px; }
+  .dnd-def { flex: 1; font-size: 0.88rem; line-height: 1.5; color: var(--text); }
+  .dnd-drop {
+    min-width: 190px; min-height: 36px;
+    border: 2px dashed #b0c4e0; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: #9aadcb;
+    transition: all 0.15s; padding: 4px 8px; text-align: center;
+  }
+  .dnd-drop.dragover { border-color: var(--blue); background: #eef4fd; color: var(--blue); }
+  .dnd-drop.correct { border-color: var(--success); background: #eaf6ef; color: var(--success); border-style: solid; }
+  .dnd-drop.incorrect { border-color: var(--error); background: #fdf0ef; color: var(--error); border-style: solid; }
+  .dnd-drop .placed-term {
+    padding: 6px 12px; border-radius: 14px; background: var(--navy);
+    color: white; font-size: 12px; font-weight: 500; cursor: pointer;
+  }
+  .dnd-drop.correct .placed-term { background: var(--success); }
+  .dnd-drop.incorrect .placed-term { background: var(--error); }
+  .dnd-score {
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; margin-top: 20px;
+    font-family: 'DM Sans', sans-serif;
+    display: none; align-items: center; gap: 16px;
+  }
+  .dnd-score-num { font-size: 2rem; font-weight: 700; color: var(--blue); }
+  .dnd-score-msg { font-size: 14px; color: var(--text); }
+
+  /* ACCORDION */
+  .accordion { display: flex; flex-direction: column; gap: 8px; }
+  .acc-item { background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .acc-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    color: var(--text); transition: background 0.15s;
+  }
+  .acc-header:hover { background: #f7f5f2; }
+  .acc-item.open .acc-header { background: #eef4fd; color: var(--blue); }
+  .acc-chevron { margin-left: auto; font-size: 12px; transition: transform 0.2s; color: var(--text-muted); }
+  .acc-item.open .acc-chevron { transform: rotate(90deg); }
+  .acc-body {
+    display: none; padding: 18px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.88rem; line-height: 1.75; color: var(--text);
+  }
+  .acc-item.open .acc-body { display: block; }
+  .acc-body p { margin-bottom: 0.8em; }
+  .acc-body a { color: var(--blue); text-decoration: none; }
+  .acc-body a:hover { text-decoration: underline; }
+
+  /* PODCAST */
+  .podcast-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: var(--radius); padding: 32px; color: white;
+    display: flex; gap: 24px; align-items: center; margin-bottom: 24px;
+  }
+  .podcast-icon { font-size: 52px; }
+  .podcast-info h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 8px; }
+  .podcast-info p { font-size: 0.88rem; opacity: 0.7; line-height: 1.6; margin-bottom: 14px; }
+  .podcast-warn { background: rgba(232,160,32,0.15); border: 1px solid rgba(232,160,32,0.4); border-radius: 6px; padding: 8px 14px; font-size: 12px; color: var(--gold-light); margin-bottom: 12px; }
+  .podcast-links { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* SOURCE */
+  .source-item { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; line-height: 1.5; }
+  .source-item:last-child { border-bottom: none; }
+  .source-item a { color: var(--blue); text-decoration: none; font-weight: 500; }
+  .source-item a:hover { text-decoration: underline; }
+  .source-author { color: var(--text-muted); font-size: 12px; margin-top: 3px; }
+
+  /* PANEL NAV */
+  .panel-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content-area { padding: 24px 20px; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .podcast-card { flex-direction: column; text-align: center; }
+    .header-inner { padding: 12px 16px; }
+    .dnd-item { flex-direction: column; }
+    .dnd-drop { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="lab-logo">
+      <a href="https://lab.fi/en" target="_blank">LAB University<br>of Applied Sciences</a>
+    </div>
+    <div class="header-title">
+      <h1>Module 3 — AI Writing</h1>
+    </div>
+    <div class="header-author">
+      Compiled by<br>
+      <a href="https://www.linkedin.com/in/hagu1/" target="_blank">Hamid Guedra</a>
+    </div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</header>
+
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">Module 3</div>
+    <div class="nav-item active" onclick="showPanel(0)" id="nav-0"><span class="nav-num">—</span> Introduction</div>
+    <div class="nav-item" onclick="showPanel(1)" id="nav-1"><span class="nav-num">3.1</span> Writing Process</div>
+    <div class="nav-item" onclick="showPanel(2)" id="nav-2"><span class="nav-num">3.2</span> GenAI: Prewriting</div>
+    <div class="nav-item" onclick="showPanel(3)" id="nav-3"><span class="nav-num">3.3</span> GenAI: Drafting</div>
+    <div class="nav-item" onclick="showPanel(4)" id="nav-4"><span class="nav-num">3.4</span> GenAI: Revising</div>
+    <div class="nav-item" onclick="showPanel(5)" id="nav-5"><span class="nav-num">3.5</span> GenAI: Editing &amp; Proofreading</div>
+    <div class="nav-item" onclick="showPanel(6)" id="nav-6"><span class="nav-num">3.6</span> Prompting: Intro</div>
+    <div class="nav-item" onclick="showPanel(7)" id="nav-7"><span class="nav-num">3.7</span> Prompting: Five Techniques</div>
+    <div class="nav-item" onclick="showPanel(8)" id="nav-8"><span class="nav-num">3.8</span> Prompting: Match Definitions</div>
+    <div class="nav-item" onclick="showPanel(9)" id="nav-9"><span class="nav-num">3.9</span> Deep Dive Podcast</div>
+    <div class="nav-item" onclick="showPanel(10)" id="nav-10"><span class="nav-num">3.10</span> Readings</div>
+    <div class="nav-item" onclick="showPanel(11)" id="nav-11"><span class="nav-num">3.11</span> Sources</div>
+  </nav>
+
+  <main class="content-area">
+
+    <!-- PANEL 0: INTRO -->
+    <section class="panel active" id="panel-0">
+      <div class="panel-header">
+        <div class="panel-tag">Module 3</div>
+        <h2>AI Writing</h2>
+      </div>
+
+      <div class="intro-hero">
+        <h3>Welcome to Module 3</h3>
+        <p style="opacity:0.85;font-size:0.95rem;margin-bottom:10px;">Key themes in this module:</p>
+        <ul>
+          <li>AI writing tools can be used throughout the writing process — from generating ideas to proofreading and offering feedback.</li>
+          <li>These tools assist with grammar and style, and can even generate citations, but they cannot replace human creativity and judgment.</li>
+          <li>While AI tools can enhance writing, they are not a substitute for thinking, original ideas, and the ability to connect with an audience.</li>
+          <li>Knowing basic prompting techniques can help you use AI tools more effectively.</li>
+        </ul>
+      </div>
+
+      <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;margin-bottom:16px;color:var(--navy);">Click any section to begin:</p>
+      <div class="toc-grid">
+        <div class="toc-card" onclick="showPanel(1)"><span class="toc-card-num">3.1</span><div><div class="toc-card-title">Writing Process</div><div class="toc-card-meta">Video · 2:30 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(2)"><span class="toc-card-num">3.2</span><div><div class="toc-card-title">GenAI at the Prewriting Stage</div><div class="toc-card-meta">Video · 4:35 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(3)"><span class="toc-card-num">3.3</span><div><div class="toc-card-title">GenAI at the Drafting Stage</div><div class="toc-card-meta">Video · 4:50 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(4)"><span class="toc-card-num">3.4</span><div><div class="toc-card-title">GenAI at the Revising Stage</div><div class="toc-card-meta">Video · 4:35 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(5)"><span class="toc-card-num">3.5</span><div><div class="toc-card-title">GenAI at Editing &amp; Proofreading</div><div class="toc-card-meta">Video · 5:10 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(6)"><span class="toc-card-num">3.6</span><div><div class="toc-card-title">Prompting: Intro</div><div class="toc-card-meta">Video · 1:30 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(7)"><span class="toc-card-num">3.7</span><div><div class="toc-card-title">Prompting: Five Techniques</div><div class="toc-card-meta">Video · 5:40 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(8)"><span class="toc-card-num">3.8</span><div><div class="toc-card-title">Prompting: Match Definitions</div><div class="toc-card-meta">Drag &amp; Drop · 5 terms</div></div></div>
+        <div class="toc-card" onclick="showPanel(9)"><span class="toc-card-num">3.9</span><div><div class="toc-card-title">Deep Dive Podcast</div><div class="toc-card-meta">Audio · 15:30 min</div></div></div>
+        <div class="toc-card" onclick="showPanel(10)"><span class="toc-card-num">3.10</span><div><div class="toc-card-title">Readings</div><div class="toc-card-meta">4 texts</div></div></div>
+      </div>
+
+      <div class="panel-nav">
+        <span></span>
+        <button class="btn btn-primary" onclick="showPanel(1)">Start with 3.1 →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 1: WRITING PROCESS -->
+    <section class="panel" id="panel-1">
+      <div class="panel-header">
+        <div class="panel-tag">3.1</div>
+        <h2>Writing Process</h2>
+      </div>
+
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/6EIBk12D5tk" allowfullscreen loading="lazy" title="3.1 Writing Process"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1JCk5UW_6b3IhY4g-T2-tpl64W6ZxZYEh/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+
+      <div style="margin-top:32px;">
+        <p style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:16px;">The four stages of the writing process:</p>
+        <div class="stages-wrap">
+          <div class="stage-row">
+            <div class="stage-num" style="background:#1768c4;">1</div>
+            <div class="stage-body">
+              <div class="stage-name">Prewriting</div>
+              <div class="stage-desc">Generating ideas and planning the structure. Involves brainstorming, outlining, and organizing thoughts. Helps clarify purpose, audience, and main ideas.</div>
+            </div>
+          </div>
+          <div class="stage-row">
+            <div class="stage-num" style="background:#1a3461;">2</div>
+            <div class="stage-body">
+              <div class="stage-name">Drafting</div>
+              <div class="stage-desc">Putting ideas into writing — composing the first draft without worrying too much about perfection. Capturing the essence of the idea.</div>
+            </div>
+          </div>
+          <div class="stage-row">
+            <div class="stage-num" style="background:#0e1f3b;">3</div>
+            <div class="stage-body">
+              <div class="stage-name">Revising</div>
+              <div class="stage-desc">Reviewing the draft and making structural changes: refining organization, clarifying ideas, and improving overall flow and coherence.</div>
+            </div>
+          </div>
+          <div class="stage-row">
+            <div class="stage-num" style="background:#2d8a4e;">4</div>
+            <div class="stage-body">
+              <div class="stage-name">Editing &amp; Proofreading</div>
+              <div class="stage-desc">A detailed review correcting grammar, punctuation, spelling, and style at the sentence and word level. Final inspection before presenting the finished work.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(0)">← Introduction</button>
+        <button class="btn btn-primary" onclick="showPanel(2)">3.2 Prewriting →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 2: PREWRITING -->
+    <section class="panel" id="panel-2">
+      <div class="panel-header">
+        <div class="panel-tag">3.2</div>
+        <h2>GenAI at the Prewriting Stage</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/2v4R-YHPcQs" allowfullscreen loading="lazy" title="3.2 GenAI at the Prewriting Stage"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1h0IYxqZYNeAv8g0n9lmbqw-_-WGCn4zf/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(1)">← 3.1</button>
+        <button class="btn btn-primary" onclick="showPanel(3)">3.3 Drafting →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 3: DRAFTING -->
+    <section class="panel" id="panel-3">
+      <div class="panel-header">
+        <div class="panel-tag">3.3</div>
+        <h2>GenAI at the Drafting Stage</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/vu_UrAKR-No" allowfullscreen loading="lazy" title="3.3 GenAI at the Drafting Stage"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1uTfihzU9eg7XWJWj0JpXK7i21GHf4Jvv/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(2)">← 3.2</button>
+        <button class="btn btn-primary" onclick="showPanel(4)">3.4 Revising →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 4: REVISING -->
+    <section class="panel" id="panel-4">
+      <div class="panel-header">
+        <div class="panel-tag">3.4</div>
+        <h2>GenAI at the Revising Stage</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/PQBQ6xL_V6M" allowfullscreen loading="lazy" title="3.4 GenAI at the Revising Stage"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1bTayEukilTZ2Cy_34D8RWgRRxHio6AbJ/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div style="margin-top:16px;">
+        <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-muted);margin-bottom:8px;">Additional resources on revising:</p>
+        <a href="https://writingprocess.mit.edu/process/step-4-revise/" target="_blank" class="resource-link">🔗 MIT: Revise</a>
+        <a href="https://writingprocess.mit.edu/process/step-4-revise/instructions-revising/" target="_blank" class="resource-link">🔗 MIT: Instructions for Revising</a>
+      </div>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(3)">← 3.3</button>
+        <button class="btn btn-primary" onclick="showPanel(5)">3.5 Editing →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 5: EDITING & PROOFREADING -->
+    <section class="panel" id="panel-5">
+      <div class="panel-header">
+        <div class="panel-tag">3.5</div>
+        <h2>GenAI at the Editing and Proofreading Stage</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/caslEGaJZjo" allowfullscreen loading="lazy" title="3.5 GenAI at the Editing and Proofreading Stage"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1NQIFTL63Mr6DAACPIM52SLHct8LD-cs9/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(4)">← 3.4</button>
+        <button class="btn btn-primary" onclick="showPanel(6)">3.6 Prompting: Intro →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 6: PROMPTING INTRO -->
+    <section class="panel" id="panel-6">
+      <div class="panel-header">
+        <div class="panel-tag">3.6</div>
+        <h2>Prompting: Intro</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/HgKF08GMxWM" allowfullscreen loading="lazy" title="3.6 Prompting: Intro"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1z5PC9sBl_xwE0QbHmksTecR05KhJuJRq/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(5)">← 3.5</button>
+        <button class="btn btn-primary" onclick="showPanel(7)">3.7 Five Techniques →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 7: FIVE TECHNIQUES -->
+    <section class="panel" id="panel-7">
+      <div class="panel-header">
+        <div class="panel-tag">3.7</div>
+        <h2>Prompting: Five Techniques</h2>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/PsRT4bSepl4" allowfullscreen loading="lazy" title="3.7 Prompting: Five Techniques"></iframe>
+      </div>
+      <a href="https://drive.google.com/file/d/1BSjo45KvU9OxfPH_kBiQ_uDb64RK-Cv9/view?usp=drive_link" target="_blank" class="resource-link">📄 Video script / lecture notes</a>
+      <a href="https://drive.google.com/file/d/14DNmyVGBjjNHM9M5E35GqCVBj_ko9oCX/view?usp=drive_link" target="_blank" class="resource-link">📄 Chain-of-thought examples</a>
+
+      <div style="margin-top:32px;">
+        <p style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:16px;">The five prompting techniques at a glance:</p>
+        <div class="technique-cards">
+
+          <div class="technique-card">
+            <div class="technique-badge" style="background:#1768c4;">Zero-<br>shot</div>
+            <div>
+              <div class="technique-name">Zero-shot Prompting</div>
+              <div class="technique-def">Giving simple, direct instructions to an AI tool without providing any examples. Relies on the model's pre-trained knowledge.</div>
+              <div class="technique-example">e.g. "Summarize this paragraph in two sentences."</div>
+            </div>
+          </div>
+
+          <div class="technique-card">
+            <div class="technique-badge" style="background:#1a3461;">Few-<br>shot</div>
+            <div>
+              <div class="technique-name">Few-shot Prompting</div>
+              <div class="technique-def">Giving an AI tool examples of what you want it to generate before making your request. Helps guide the output format and style.</div>
+              <div class="technique-example">e.g. Showing the AI two example email greetings, then asking it to write a third.</div>
+            </div>
+          </div>
+
+          <div class="technique-card">
+            <div class="technique-badge" style="background:#0e1f3b;">Chain<br>of thought</div>
+            <div>
+              <div class="technique-name">Chain-of-thought Prompting</div>
+              <div class="technique-def">Asking an AI tool to explain things step-by-step, showing its reasoning. Breaks down complex problems into individual steps.</div>
+              <div class="technique-example">e.g. "Explain your reasoning step by step before giving your answer."</div>
+            </div>
+          </div>
+
+          <div class="technique-card">
+            <div class="technique-badge" style="background:#2d8a4e;">Role<br>prompting</div>
+            <div>
+              <div class="technique-name">Role Prompting</div>
+              <div class="technique-def">Asking an AI tool to take on a specific perspective or persona when responding to your requests. Tailors the output to a specific audience or purpose.</div>
+              <div class="technique-example">e.g. "You are an experienced academic writing tutor. Review this introduction and give feedback."</div>
+            </div>
+          </div>
+
+          <div class="technique-card">
+            <div class="technique-badge" style="background:#b85c00;">Iterative</div>
+            <div>
+              <div class="technique-name">Iterative Prompting</div>
+              <div class="technique-def">A process where you refine your requests to an AI tool based on the AI's responses. You improve the prompt progressively until you get the output you need.</div>
+              <div class="technique-example">e.g. Starting with a broad request, then refining: "Make it more formal" → "Shorten it" → "Add a call to action."</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(6)">← 3.6</button>
+        <button class="btn btn-primary" onclick="showPanel(8)">3.8 Match Definitions →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 8: DRAG AND DROP -->
+    <section class="panel" id="panel-8">
+      <div class="panel-header">
+        <div class="panel-tag">3.8</div>
+        <h2>Prompting: Match Definitions</h2>
+      </div>
+
+      <div class="dnd-instructions">
+        💡 <strong>Instructions:</strong> First, study the five prompting techniques in section 3.7. Then drag each term from the bank below and drop it onto the matching definition.
+      </div>
+
+      <div class="dnd-terms-pool" id="termsPool3"></div>
+      <div class="dnd-list" id="dndList3"></div>
+
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="checkDnD3()">✓ Check Answers</button>
+        <button class="btn btn-secondary" onclick="showSolution3()">👁 Show Solution</button>
+        <button class="btn btn-secondary" onclick="resetDnD3()">↺ Reset</button>
+      </div>
+
+      <div class="dnd-score" id="dndScore3">
+        <div class="dnd-score-num" id="dndScoreNum3">0/5</div>
+        <div class="dnd-score-msg" id="dndScoreMsg3"></div>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(7)">← 3.7</button>
+        <button class="btn btn-primary" onclick="showPanel(9)">3.9 Podcast →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 9: PODCAST -->
+    <section class="panel" id="panel-9">
+      <div class="panel-header">
+        <div class="panel-tag">3.9</div>
+        <h2>Deep Dive Podcast: Section 3</h2>
+      </div>
+      <div class="podcast-card">
+        <div class="podcast-icon">🎙️</div>
+        <div class="podcast-info">
+          <h3>Deep Dive Podcast — AI Corner, Section 3</h3>
+          <div class="podcast-warn">⚠️ This podcast is 100% AI-generated (Google NotebookLM) and may contain inaccuracies. Listen critically.</div>
+          <p>A Google NotebookLM AI-generated podcast synthesizing the materials in Section 3. Duration: approx. 15:30 min.</p>
+          <div class="podcast-links">
+            <a href="https://drive.google.com/file/d/1g3JPoCAx4uLs1ABAz7n94nWCCEXR_hpa/view?usp=drive_link" target="_blank" class="resource-link" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:white;">🎧 Listen to podcast</a>
+          </div>
+        </div>
+      </div>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(8)">← 3.8</button>
+        <button class="btn btn-primary" onclick="showPanel(10)">3.10 Readings →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 10: READINGS -->
+    <section class="panel" id="panel-10">
+      <div class="panel-header">
+        <div class="panel-tag">3.10</div>
+        <h2>Readings</h2>
+      </div>
+
+      <div class="accordion">
+
+        <div class="acc-item" id="racc-0">
+          <div class="acc-header" onclick="toggleAcc('racc-0')">
+            <span>📄</span> The Writing Process
+            <span class="acc-chevron">▶</span>
+          </div>
+          <div class="acc-body">
+            <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">Generated by prompting <a href="https://web.diffit.me/" target="_blank">diffit.me</a></p>
+            <p>The writing process is a journey that transforms thoughts into polished pieces of writing. It is not a rigid set of rules, but rather a dynamic and evolving process that guides writers from initial inspiration to the final product. This process can be broken down into key steps: prewriting, drafting, revising, and editing and proofreading.</p>
+            <p><strong>Prewriting</strong> is the foundation, where writers generate ideas and plan the structure of their work. This stage involves brainstorming, outlining, and organizing thoughts. It helps writers clarify their purpose, audience, and main ideas — like laying the groundwork for a building.</p>
+            <p><strong>Drafting</strong> is where writers put pen to paper and compose the first draft. The focus is on getting ideas down without worrying too much about perfection — capturing the essence of the idea, not creating a masterpiece.</p>
+            <p><strong>Revising</strong> is where writers step back and review their draft, making structural changes, refining the organization, clarifying ideas, and improving the overall flow. It is like adding details and refining the composition of a painting.</p>
+            <p><strong>Editing and proofreading</strong> is a detailed review focused on correcting grammar, punctuation, spelling, and other mechanical aspects of writing. Proofreading is the final inspection before presenting the finished work.</p>
+          </div>
+        </div>
+
+        <div class="acc-item" id="racc-1">
+          <div class="acc-header" onclick="toggleAcc('racc-1')">
+            <span>📄</span> AI in the Writing Process
+            <span class="acc-chevron">▶</span>
+          </div>
+          <div class="acc-body">
+            <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">Generated by prompting <a href="https://web.diffit.me/" target="_blank">diffit.me</a></p>
+            <p>The rise of artificial intelligence has sparked both excitement and apprehension, particularly in the realm of writing. While some fear that AI tools will replace human writers, others see them as valuable assistants that can enhance the writing process. AI writing tools can be used throughout the writing process — from prewriting to proofreading — offering a range of features that can improve quality and efficiency.</p>
+            <p>One of the most significant benefits of AI writing tools is their ability to generate ideas and suggestions. These tools analyze vast amounts of data to identify popular and trending topics, which can be particularly helpful for writers struggling to come up with a topic or who want to ensure relevance to their target audience.</p>
+            <p>AI writing tools can also assist with drafting by providing suggestions for additional ideas and writing style, and can improve flow and readability by suggesting alternative word choices and sentence structures.</p>
+            <p>Once a draft is complete, AI writing tools can be used to revise and edit the text — helping writers improve clarity, conciseness, and flow. They can even generate citations and bibliographies. For proofreading, AI tools help identify and correct errors in grammar, punctuation, spelling, and style, and ensure consistency in tone and voice.</p>
+            <p>However, AI tools cannot replace human creativity, judgment, and the ability to connect with an audience. They are assistants, not authors.</p>
+          </div>
+        </div>
+
+        <div class="acc-item" id="racc-2">
+          <div class="acc-header" onclick="toggleAcc('racc-2')">
+            <span>📄</span> Prompting Techniques
+            <span class="acc-chevron">▶</span>
+          </div>
+          <div class="acc-body">
+            <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">Generated by prompting <a href="https://web.diffit.me/" target="_blank">diffit.me</a></p>
+            <p>Prompting is a crucial skill when working with large language models (LLMs). Prompt engineering is the art of crafting precise instructions to guide LLMs towards specific tasks and desired outputs.</p>
+            <p><strong>Zero-shot</strong> prompting provides a direct instruction or question without any examples, relying solely on the LLM's pre-trained knowledge. It is useful for simple tasks or general knowledge queries.</p>
+            <p><strong>Few-shot</strong> prompting provides a small number of examples before asking the model to perform a task. This technique helps guide the model's output format and style, significantly improving performance on specific tasks.</p>
+            <p><strong>Chain-of-Thought (CoT)</strong> prompting breaks down complex problems into individual steps and feeds them to the model one at a time. By breaking down the task into smaller, logical steps, the model's reasoning capabilities are enhanced.</p>
+            <p><strong>Role prompting</strong> assigns a specific role to the LLM, which can influence its response style and content — for example, asking it to act as a customer service representative, a technical writer, or a creative storyteller.</p>
+            <p><strong>Iterative prompting</strong> is a dynamic process of continuous refinement, where the user evaluates each response, identifies areas for improvement, and crafts a new prompt that builds on the model's output. It is particularly valuable for complex or creative tasks.</p>
+          </div>
+        </div>
+
+        <div class="acc-item" id="racc-3">
+          <div class="acc-header" onclick="toggleAcc('racc-3')">
+            <span>🐒</span> The Infinite Monkey Theorem and Generative AI
+            <span class="acc-chevron">▶</span>
+          </div>
+          <div class="acc-body">
+            <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">Generated by prompting <a href="https://web.diffit.me/" target="_blank">diffit.me</a></p>
+            <p>The Infinite Monkey Theorem is a mind-bending idea: if you had an infinite number of monkeys banging away on typewriters for an infinite amount of time, they would eventually, by sheer chance, produce the complete works of William Shakespeare. It is a thought experiment highlighting the power of probability and randomness.</p>
+            <p>In reality, a recent study showed that it would take far longer than the lifespan of our universe for a monkey to randomly produce Shakespeare. Mathematicians at the University of Technology Sydney (UTS) crunched the numbers — even a hypothetical army of 200,000 chimpanzees typing at lightning speed until the end of time would not produce Hamlet anytime soon.</p>
+            <p>Enter generative AI. Generative AI systems are like the monkeys with typewriters, but instead of random keystrokes, they use complex algorithms to generate content based on the data they have been trained on. Generative AI is not randomly producing words — it is simulating how language works, predicting the most likely next word based on context and training data.</p>
+            <p>This is both generative AI's strength and limitation: it produces statistically likely, coherent-sounding text, but not necessarily <em>true</em>, <em>original</em>, or <em>creative</em> text in the human sense.</p>
+            <a href="https://youtu.be/Cdd64B-BDWQ" target="_blank">🎥 What's the infinite monkey theorem? (Scientific American)</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(9)">← 3.9</button>
+        <button class="btn btn-primary" onclick="showPanel(11)">3.11 Sources →</button>
+      </div>
+    </section>
+
+    <!-- PANEL 11: SOURCES -->
+    <section class="panel" id="panel-11">
+      <div class="panel-header">
+        <div class="panel-tag">3.11</div>
+        <h2>Sources and Other Materials</h2>
+      </div>
+
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;letter-spacing:0.05em;text-transform:uppercase;">Video Scripts / Lecture Notes</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+        <a href="https://drive.google.com/file/d/1JCk5UW_6b3IhY4g-T2-tpl64W6ZxZYEh/view?usp=drive_link" target="_blank" class="resource-link">📄 3.1 Writing Process</a>
+        <a href="https://drive.google.com/file/d/1h0IYxqZYNeAv8g0n9lmbqw-_-WGCn4zf/view?usp=drive_link" target="_blank" class="resource-link">📄 3.2 The Prewriting Stage</a>
+        <a href="https://drive.google.com/file/d/1uTfihzU9eg7XWJWj0JpXK7i21GHf4Jvv/view?usp=drive_link" target="_blank" class="resource-link">📄 3.3 The Drafting Stage</a>
+        <a href="https://drive.google.com/file/d/1bTayEukilTZ2Cy_34D8RWgRRxHio6AbJ/view?usp=drive_link" target="_blank" class="resource-link">📄 3.4 The Revising Stage</a>
+        <a href="https://drive.google.com/file/d/1NQIFTL63Mr6DAACPIM52SLHct8LD-cs9/view?usp=drive_link" target="_blank" class="resource-link">📄 3.5 Editing and Proofreading</a>
+        <a href="https://drive.google.com/file/d/1z5PC9sBl_xwE0QbHmksTecR05KhJuJRq/view?usp=drive_link" target="_blank" class="resource-link">📄 3.6 Prompting: Intro</a>
+        <a href="https://drive.google.com/file/d/1BSjo45KvU9OxfPH_kBiQ_uDb64RK-Cv9/view?usp=drive_link" target="_blank" class="resource-link">📄 3.7 Prompting: Five Techniques</a>
+      </div>
+
+      <div style="background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:28px;font-size:0.85rem;color:var(--text-muted);line-height:1.6;">
+        <strong style="color:var(--text);">Note:</strong> The lecture script drafts/notes were generated by using AI tools for brainstorming (ChatGPT, Gemini, Claude, Google NotebookLM, Perplexity, and Microsoft Copilot). The AI outputs were curated and edited to write the final lecture scripts/notes.
+      </div>
+
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:16px;letter-spacing:0.05em;text-transform:uppercase;">Sources &amp; Background Materials</h3>
+
+      <div class="source-item"><a href="https://broadviewpress.com/product/ai-and-writing/#tab-description" target="_blank">AI and Writing</a><div class="source-author">Sidney Dobrin</div></div>
+      <div class="source-item"><a href="https://writingprocess.mit.edu/" target="_blank">The Writing Process</a><div class="source-author">Eric Grunwald, MIT</div></div>
+      <div class="source-item"><a href="https://www.microsoft.com/en-us/microsoft-365/word/ai-writing" target="_blank">Understanding AI Writing Tools and Writing Assistants</a><div class="source-author">Microsoft</div></div>
+      <div class="source-item"><a href="https://openai.com/chatgpt/use-cases/writing-with-ai/" target="_blank">Writing with AI</a><div class="source-author">OpenAI</div></div>
+      <div class="source-item"><a href="https://www.arthurperret.fr/blog/2024-11-14-student-guide-not-writing-with-chatgpt.html" target="_blank">A Student's Guide to Not Writing with ChatGPT</a><div class="source-author">Arthur Perret</div></div>
+      <div class="source-item"><a href="https://michellekassorla.substack.com/p/recognizing-ai-structures-in-writing" target="_blank">Recognizing AI Structures in Writing</a><div class="source-author">Michelle Kassorla, Eugenia Novokshanova</div></div>
+      <div class="source-item"><a href="https://learnprompting.org/docs/introduction" target="_blank">Learnprompting.org</a><div class="source-author">Sander Schulhoff, Fady Yanni</div></div>
+
+      <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-muted);text-align:center;">
+        Module 3 · <a href="https://lab.fi/en" target="_blank" style="color:var(--blue);">LAB University of Applied Sciences</a> · Compiled by <a href="https://www.linkedin.com/in/hagu1/" target="_blank" style="color:var(--blue);">Hamid Guedra</a>
+      </div>
+
+      <div class="panel-nav">
+        <button class="btn btn-secondary" onclick="showPanel(10)">← 3.10</button>
+        <button class="btn btn-primary" onclick="showPanel(0)">↑ Back to Top</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ── NAVIGATION ──
+const TOTAL = 12;
+let visited = new Set([0]);
+
+function showPanel(n) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n2 => n2.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.getElementById('nav-' + n).classList.add('active');
+  visited.add(n);
+  document.getElementById('progressBar').style.width = (visited.size / TOTAL * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── ACCORDION ──
+function toggleAcc(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ── DRAG AND DROP ──
+const dndItems3 = [
+  { term: "Few-shot prompting",        def: "Giving an AI tool examples of what you want it to generate." },
+  { term: "Iterative prompting",       def: "A process where you refine your requests to an AI tool based on the AI's responses." },
+  { term: "Role prompting",            def: "Asking an AI tool to take on a specific perspective when responding to your requests." },
+  { term: "Zero-shot prompting",       def: "Giving simple, direct instructions to an AI tool without examples." },
+  { term: "Chain-of-thought prompting",def: "Asking an AI tool to explain things step-by-step, showing its reasoning." }
+];
+
+let draggedTerm3 = null;
+
+function buildDnD3() {
+  const pool = document.getElementById('termsPool3');
+  const list = document.getElementById('dndList3');
+  pool.innerHTML = '';
+  list.innerHTML = '';
+  document.getElementById('dndScore3').style.display = 'none';
+
+  const shuffled = [...dndItems3].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const span = document.createElement('span');
+    span.className = 'dnd-term';
+    span.textContent = item.term;
+    span.draggable = true;
+    span.dataset.term = item.term;
+    span.addEventListener('dragstart', () => { draggedTerm3 = item.term; span.classList.add('dragging'); });
+    span.addEventListener('dragend', () => span.classList.remove('dragging'));
+    span.addEventListener('touchstart', ts3, { passive: true });
+    span.addEventListener('touchmove', tm3, { passive: false });
+    span.addEventListener('touchend', te3);
+    pool.appendChild(span);
+  });
+
+  dndItems3.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'dnd-item';
+    row.innerHTML = `
+      <span class="dnd-num">${i + 1}</span>
+      <div class="dnd-def">${item.def}</div>
+      <div class="dnd-drop" data-answer="${item.term}"><span style="font-size:11px;opacity:0.6;">Drop here</span></div>`;
+    const drop = row.querySelector('.dnd-drop');
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+    drop.addEventListener('drop', e => { e.preventDefault(); dropTerm3(drop); });
+    list.appendChild(row);
+  });
+}
+
+function dropTerm3(dropZone) {
+  if (!draggedTerm3) return;
+  dropZone.classList.remove('dragover', 'correct', 'incorrect');
+  const existing = dropZone.querySelector('.placed-term');
+  if (existing) { returnTerm3(existing.textContent); }
+  const placed = document.createElement('span');
+  placed.className = 'placed-term';
+  placed.textContent = draggedTerm3;
+  placed.addEventListener('click', () => { returnTerm3(draggedTerm3); dropZone.innerHTML = '<span style="font-size:11px;opacity:0.6;">Drop here</span>'; dropZone.classList.remove('correct','incorrect'); });
+  dropZone.innerHTML = '';
+  dropZone.appendChild(placed);
+  document.querySelectorAll('#termsPool3 .dnd-term').forEach(t => { if (t.dataset.term === draggedTerm3) t.classList.add('placed'); });
+  draggedTerm3 = null;
+}
+
+function returnTerm3(term) {
+  document.querySelectorAll('#termsPool3 .dnd-term').forEach(t => { if (t.dataset.term === term) t.classList.remove('placed'); });
+}
+
+function checkDnD3() {
+  let score = 0;
+  document.querySelectorAll('#dndList3 .dnd-drop').forEach(drop => {
+    const placed = drop.querySelector('.placed-term');
+    if (placed) {
+      const correct = placed.textContent === drop.dataset.answer;
+      drop.classList.remove('correct','incorrect');
+      drop.classList.add(correct ? 'correct' : 'incorrect');
+      if (correct) score++;
+    }
+  });
+  const el = document.getElementById('dndScore3');
+  el.style.display = 'flex';
+  document.getElementById('dndScoreNum3').textContent = score + '/5';
+  const msgs = ['Keep studying 📚', 'Pretty good!', 'Good job! 👍', 'Very good! 🌟', 'Excellent! 🎉'];
+  document.getElementById('dndScoreMsg3').textContent = msgs[Math.min(score, 4)];
+}
+
+function showSolution3() {
+  dndItems3.forEach(item => {
+    document.querySelectorAll('#dndList3 .dnd-drop').forEach(drop => {
+      if (drop.dataset.answer === item.term) {
+        const placed = document.createElement('span');
+        placed.className = 'placed-term';
+        placed.textContent = item.term;
+        drop.innerHTML = '';
+        drop.appendChild(placed);
+        drop.classList.remove('incorrect');
+        drop.classList.add('correct');
+      }
+    });
+  });
+  document.querySelectorAll('#termsPool3 .dnd-term').forEach(t => t.classList.add('placed'));
+  const el = document.getElementById('dndScore3');
+  el.style.display = 'flex';
+  document.getElementById('dndScoreNum3').textContent = '5/5';
+  document.getElementById('dndScoreMsg3').textContent = 'Solution shown ✓';
+}
+
+function resetDnD3() { buildDnD3(); }
+
+// Touch support
+let touchClone3 = null;
+function ts3(e) { draggedTerm3 = e.currentTarget.dataset.term; touchClone3 = e.currentTarget.cloneNode(true); touchClone3.style.cssText='position:fixed;opacity:0.8;pointer-events:none;z-index:9999;'; document.body.appendChild(touchClone3); }
+function tm3(e) { e.preventDefault(); if (!touchClone3) return; const t=e.touches[0]; touchClone3.style.left=(t.clientX-30)+'px'; touchClone3.style.top=(t.clientY-15)+'px'; }
+function te3(e) { if (touchClone3){touchClone3.remove();touchClone3=null;} if(!draggedTerm3)return; const t=e.changedTouches[0]; const el=document.elementFromPoint(t.clientX,t.clientY); const drop=el?el.closest('.dnd-drop'):null; if(drop)dropTerm3(drop); draggedTerm3=null; }
+
+document.addEventListener('DOMContentLoaded', () => { buildDnD3(); });
+</script>
+</body>
+</html>
