@@ -260,13 +260,15 @@
   .impact-card.open { border-color: var(--blue); }
 
   /* FLOWCHART */
-  .flowchart-intro {
-    background: white; border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 20px 24px; margin-bottom: 24px;
-    font-size: 0.9rem; line-height: 1.7;
+  .flowchart-source {
+    font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;
   }
-  .flowchart-intro a { color: var(--blue); }
-  .flowchart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+  .flowchart-source a { color: var(--blue); }
+  .fc-svg-wrap {
+    background: white; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 12px; margin-bottom: 28px; overflow-x: auto;
+  }
+  .fc-tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
   .fc-tip {
     background: white; border: 1px solid var(--border); border-radius: 8px;
     padding: 16px 18px;
@@ -274,23 +276,6 @@
   .fc-tip-icon { font-size: 1.4rem; margin-bottom: 8px; }
   .fc-tip-title { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
   .fc-tip-body { font-size: 0.84rem; line-height: 1.6; color: var(--text); }
-
-  .flowchart-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 24px; }
-  .fc-step {
-    display: flex; gap: 16px; align-items: flex-start;
-    padding: 16px 18px; background: white; border: 1px solid var(--border);
-    border-bottom: none;
-    font-size: 0.88rem; line-height: 1.6;
-  }
-  .fc-step:first-child { border-radius: 8px 8px 0 0; }
-  .fc-step:last-child { border-radius: 0 0 8px 8px; border-bottom: 1px solid var(--border); }
-  .fc-step-num {
-    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
-    color: var(--blue); min-width: 28px;
-  }
-  .fc-step-q { font-weight: 600; margin-bottom: 4px; font-family: 'DM Sans', sans-serif; font-size: 13px; }
-  .fc-step-if-yes { color: var(--success); font-size: 12px; margin-top: 4px; }
-  .fc-step-if-no { color: var(--error); font-size: 12px; }
 
   /* ACTIVITIES */
   .activity-card {
@@ -346,7 +331,7 @@
   @media (max-width: 768px) {
     .sidebar { display: none; }
     .content-area { padding: 24px 20px; }
-    .toc-grid, .impact-grid, .flowchart-grid { grid-template-columns: 1fr; }
+    .toc-grid, .impact-grid, .fc-tips-grid { grid-template-columns: 1fr; }
     .podcast-card { flex-direction: column; text-align: center; }
     .header-inner { padding: 12px 16px; }
   }
@@ -361,7 +346,7 @@
     </div>
     <div class="header-title">
       <h1>Module 2 — AI Ethics and Risks</h1>
-      <div class="subtitle">English for Academic &amp; Business Purposes</div>
+
     </div>
     <div class="header-author">
       Compiled by<br>
@@ -410,7 +395,7 @@
         </ul>
       </div>
 
-      <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;margin-bottom:16px;color:var(--navy);">This module has 11 subsections. Click any section to begin:</p>
+      <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;margin-bottom:16px;color:var(--navy);">Click any section to begin:</p>
       <div class="toc-grid">
         <div class="toc-card" onclick="showPanel(1)"><span class="toc-card-num">2.1</span><div><div class="toc-card-title">What is AI Ethics?</div><div class="toc-card-meta">Video · 6:30 min</div></div></div>
         <div class="toc-card" onclick="showPanel(2)"><span class="toc-card-num">2.2</span><div><div class="toc-card-title">AI Policies and Guidelines</div><div class="toc-card-meta">Accordion · 5 topics</div></div></div>
@@ -671,59 +656,139 @@
         <h2>Flowchart: Safe or Unsafe to Use GenAI?</h2>
       </div>
 
-      <div class="flowchart-intro">
-        When is it safe to use GenAI (ChatGPT or any other GenAI tool)? Study this guide to better understand when it is appropriate to use generative AI tools.<br>
-        <span style="font-size:12px;color:var(--text-muted);">Based on: UNESCO. <a href="https://unesdoc.unesco.org/ark:/48223/pf0000385146" target="_blank">ChatGPT and Artificial Intelligence in Higher Education. Quick Start Guide</a>.</span>
-      </div>
+      <p style="font-size:0.9rem;line-height:1.6;margin-bottom:12px;">Work through each decision point to determine whether it is appropriate to use a GenAI tool for a given task.</p>
+      <p class="flowchart-source">Based on: UNESCO. <a href="https://unesdoc.unesco.org/ark:/48223/pf0000385146" target="_blank">ChatGPT and Artificial Intelligence in Higher Education. Quick Start Guide</a>.</p>
 
-      <div class="flowchart-steps">
-        <div class="fc-step">
-          <span class="fc-step-num">1</span>
-          <div>
-            <div class="fc-step-q">Is it allowed by your institution / teacher?</div>
-            <div class="fc-step-if-no">✗ If no → Do not use GenAI for this task.</div>
-            <div class="fc-step-if-yes">✓ If yes → Continue to step 2.</div>
-          </div>
-        </div>
-        <div class="fc-step">
-          <span class="fc-step-num">2</span>
-          <div>
-            <div class="fc-step-q">Does the task involve confidential data or personal information?</div>
-            <div class="fc-step-if-no">✗ If yes → Do not use GenAI. You may be violating privacy laws or institutional data policies.</div>
-            <div class="fc-step-if-yes">✓ If no → Continue to step 3.</div>
-          </div>
-        </div>
-        <div class="fc-step">
-          <span class="fc-step-num">3</span>
-          <div>
-            <div class="fc-step-q">Can you verify and take full responsibility for the output?</div>
-            <div class="fc-step-if-no">✗ If no → Do not use GenAI, or use it only with extreme caution.</div>
-            <div class="fc-step-if-yes">✓ If yes → You may use GenAI, but proceed mindfully (see tips below).</div>
-          </div>
-        </div>
+      <div class="fc-svg-wrap">
+        <svg viewBox="0 0 680 690" xmlns="http://www.w3.org/2000/svg"
+             style="width:100%;max-width:640px;display:block;margin:0 auto;"
+             font-family="'DM Sans', sans-serif">
+          <defs>
+            <!-- Arrowhead markers -->
+            <marker id="ah-blue"   markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#1768c4"/></marker>
+            <marker id="ah-green"  markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#2d8a4e"/></marker>
+            <marker id="ah-red"    markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#c0392b"/></marker>
+            <marker id="ah-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#b85c00"/></marker>
+            <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(14,31,59,0.15)"/>
+            </filter>
+          </defs>
+
+          <!-- ═══════════════════════════════ -->
+          <!--  START pill                     -->
+          <!-- ═══════════════════════════════ -->
+          <rect x="230" y="18" width="220" height="44" rx="22" fill="#0e1f3b" filter="url(#shadow)"/>
+          <text x="340" y="36" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="9.5" font-weight="600" letter-spacing="0.14em">START</text>
+          <text x="340" y="52" text-anchor="middle" fill="white" font-size="12.5" font-weight="500">Should I use GenAI?</text>
+
+          <!-- Arrow: START → D1 -->
+          <line x1="340" y1="62" x2="340" y2="103" stroke="#1768c4" stroke-width="2" marker-end="url(#ah-blue)"/>
+
+          <!-- ═══════════════════════════════ -->
+          <!--  DIAMOND 1                      -->
+          <!--  "Allowed by institution?"      -->
+          <!-- ═══════════════════════════════ -->
+          <polygon points="340,106 472,172 340,238 208,172" fill="#1768c4" filter="url(#shadow)"/>
+          <text x="340" y="167" text-anchor="middle" fill="white" font-size="12" font-weight="500">
+            <tspan x="340" dy="0">Allowed by your</tspan>
+            <tspan x="340" dy="17">institution / teacher?</tspan>
+          </text>
+
+          <!-- YES ↓ from D1 -->
+          <line x1="340" y1="238" x2="340" y2="278" stroke="#2d8a4e" stroke-width="2.5" marker-end="url(#ah-green)"/>
+          <rect x="345" y="247" width="34" height="17" rx="3" fill="#2d8a4e"/>
+          <text x="362" y="259" text-anchor="middle" fill="white" font-size="10" font-weight="700">YES</text>
+
+          <!-- NO ← from D1 → STOP 1 -->
+          <polyline points="208,172 118,172" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ah-red)"/>
+          <rect x="155" y="152" width="30" height="17" rx="3" fill="#c0392b"/>
+          <text x="170" y="164" text-anchor="middle" fill="white" font-size="10" font-weight="700">NO</text>
+          <!-- STOP 1 box -->
+          <rect x="8" y="152" width="110" height="40" rx="7" fill="#c0392b" filter="url(#shadow)"/>
+          <text x="63" y="168" text-anchor="middle" fill="white" font-size="11.5" font-weight="600">Do NOT use</text>
+          <text x="63" y="183" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10.5">GenAI</text>
+
+          <!-- ═══════════════════════════════ -->
+          <!--  DIAMOND 2                      -->
+          <!--  "Involves confidential data?"  -->
+          <!-- ═══════════════════════════════ -->
+          <polygon points="340,280 472,346 340,412 208,346" fill="#1768c4" filter="url(#shadow)"/>
+          <text x="340" y="341" text-anchor="middle" fill="white" font-size="12" font-weight="500">
+            <tspan x="340" dy="0">Involves confidential</tspan>
+            <tspan x="340" dy="17">or personal data?</tspan>
+          </text>
+
+          <!-- NO ↓ from D2 (safe to continue) -->
+          <line x1="340" y1="412" x2="340" y2="452" stroke="#2d8a4e" stroke-width="2.5" marker-end="url(#ah-green)"/>
+          <rect x="345" y="421" width="26" height="17" rx="3" fill="#2d8a4e"/>
+          <text x="358" y="433" text-anchor="middle" fill="white" font-size="10" font-weight="700">NO</text>
+
+          <!-- YES ← from D2 → STOP 2 (confidential = bad) -->
+          <polyline points="208,346 118,346" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ah-red)"/>
+          <rect x="150" y="326" width="34" height="17" rx="3" fill="#c0392b"/>
+          <text x="167" y="338" text-anchor="middle" fill="white" font-size="10" font-weight="700">YES</text>
+          <!-- STOP 2 box -->
+          <rect x="8" y="326" width="110" height="40" rx="7" fill="#c0392b" filter="url(#shadow)"/>
+          <text x="63" y="342" text-anchor="middle" fill="white" font-size="11.5" font-weight="600">Do NOT use</text>
+          <text x="63" y="357" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10.5">GenAI</text>
+
+          <!-- ═══════════════════════════════ -->
+          <!--  DIAMOND 3                      -->
+          <!--  "Can you verify & take resp?"  -->
+          <!-- ═══════════════════════════════ -->
+          <polygon points="340,454 472,520 340,586 208,520" fill="#1768c4" filter="url(#shadow)"/>
+          <text x="340" y="515" text-anchor="middle" fill="white" font-size="12" font-weight="500">
+            <tspan x="340" dy="0">Can you verify &amp; take</tspan>
+            <tspan x="340" dy="17">full responsibility?</tspan>
+          </text>
+
+          <!-- YES ↓ from D3 → GO -->
+          <line x1="340" y1="586" x2="340" y2="618" stroke="#2d8a4e" stroke-width="2.5" marker-end="url(#ah-green)"/>
+          <rect x="345" y="595" width="34" height="17" rx="3" fill="#2d8a4e"/>
+          <text x="362" y="607" text-anchor="middle" fill="white" font-size="10" font-weight="700">YES</text>
+
+          <!-- NO ← from D3 → CAUTION -->
+          <polyline points="208,520 118,520" stroke="#b85c00" stroke-width="2" fill="none" marker-end="url(#ah-orange)"/>
+          <rect x="155" y="500" width="30" height="17" rx="3" fill="#b85c00"/>
+          <text x="170" y="512" text-anchor="middle" fill="white" font-size="10" font-weight="700">NO</text>
+          <!-- CAUTION box -->
+          <rect x="8" y="498" width="110" height="44" rx="7" fill="#b85c00" filter="url(#shadow)"/>
+          <text x="63" y="514" text-anchor="middle" fill="white" font-size="11.5" font-weight="600">Avoid or use</text>
+          <text x="63" y="529" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10.5">with caution</text>
+
+          <!-- ═══════════════════════════════ -->
+          <!--  GO box                         -->
+          <!-- ═══════════════════════════════ -->
+          <rect x="200" y="620" width="280" height="58" rx="10" fill="#2d8a4e" filter="url(#shadow)"/>
+          <text x="340" y="644" text-anchor="middle" fill="white" font-size="14" font-weight="700">✓  You may use GenAI</text>
+          <text x="340" y="662" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="11">Proceed mindfully — see tips below</text>
+
+          <!-- Arrow GO → tips -->
+          <line x1="340" y1="678" x2="340" y2="684" stroke="#2d8a4e" stroke-width="2" marker-end="url(#ah-green)"/>
+        </svg>
       </div>
 
       <p style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:14px;">When using GenAI, always remember:</p>
-      <div class="flowchart-grid">
+      <div class="fc-tips-grid">
         <div class="fc-tip">
           <div class="fc-tip-icon">🌱</div>
           <div class="fc-tip-title">Be mindful</div>
-          <div class="fc-tip-body">Even when it is safe to use a GenAI tool, you still need to be mindful of how and for what purposes you are using it. For example, remember that every use of GenAI tools consumes energy and water.</div>
+          <div class="fc-tip-body">Even when it is safe to use a GenAI tool, be mindful of how and for what purposes you are using it. Remember that every use of GenAI tools consumes energy and water.</div>
         </div>
         <div class="fc-tip">
           <div class="fc-tip-icon">🙋</div>
           <div class="fc-tip-title">Take full responsibility</div>
-          <div class="fc-tip-body">You must take full responsibility for any content you generate with GenAI tools and decide to publish. Be transparent about the use of GenAI tools — add a note that explains how and for what purposes you used them.</div>
+          <div class="fc-tip-body">You must take full responsibility for any content you generate and publish. Be transparent — add a note explaining how and for what purposes you used GenAI.</div>
         </div>
         <div class="fc-tip">
           <div class="fc-tip-icon">✔️</div>
           <div class="fc-tip-title">Double-check and verify</div>
-          <div class="fc-tip-body">Even if you are an expert and know your topic well, it is still important to carefully double-check and verify any content generated with GenAI tools.</div>
+          <div class="fc-tip-body">Even if you know your topic well, carefully double-check and verify any content generated with GenAI tools before using it.</div>
         </div>
         <div class="fc-tip">
           <div class="fc-tip-icon">🎯</div>
           <div class="fc-tip-title">Consider the purpose</div>
-          <div class="fc-tip-body">You need to carefully consider for what purposes you are going to use the output and what is its truth value. You want to be ethical and do not want to generate inaccurate or false content.</div>
+          <div class="fc-tip-body">Consider carefully for what purposes you will use the output and what its truth value is. Do not generate inaccurate or false content.</div>
         </div>
       </div>
 
@@ -745,6 +810,7 @@
           <h3>Deep Dive Podcast — AI Corner, Section 2</h3>
           <div class="podcast-warn">⚠️ This podcast is 100% AI-generated (Google NotebookLM) and may contain inaccuracies. Listen critically.</div>
           <p>A Google NotebookLM AI-generated podcast synthesizing the materials in Section 2. Duration: approx. 15:45 min.</p>
+          <a href="https://drive.google.com/file/d/1LlBFasVgoYJDwm60DGLOVWS1RUdYFYEm/view" target="_blank" class="resource-link" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:white;">🎧 Listen to podcast</a>
           <a href="https://drive.google.com/file/d/1QoizaQXa8ebSO2893DtzoiwpoxMiXekQ/view?usp=drive_link" target="_blank" class="resource-link" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:white;">📄 Podcast audio transcript</a>
         </div>
       </div>
