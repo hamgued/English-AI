@@ -876,6 +876,10 @@ const TOTAL = 12;
 let visited = new Set([0]);
 
 function showPanel(n) {
+  // Stop any playing YouTube videos
+  document.querySelectorAll('iframe').forEach(f => {
+    f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+  });
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n2 => n2.classList.remove('active'));
   document.getElementById('panel-' + n).classList.add('active');
