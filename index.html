@@ -4,71 +4,54 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>English &amp; AI — Course Modules</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy:       #0e1f3b;
-    --navy-mid:   #1a3461;
-    --blue:       #1768c4;
-    --blue-light: #3d8ef0;
-    --gold:       #e8a020;
-    --gold-light: #f5c842;
-    --cream:      #faf7f2;
-    --white:      #ffffff;
-    --text:       #1a1a2e;
-    --text-muted: #5a6070;
-    --border:     #ddd8cf;
-    --radius:     10px;
-    --shadow:     0 4px 20px rgba(14,31,59,0.12);
-    --shadow-lg:  0 8px 40px rgba(14,31,59,0.18);
+    --lab-black:      #1a1a1a;
+    --lab-white:      #ffffff;
+    --lab-blue:       #0046ad;
+    --lab-blue-hover: #003a8c;
+    --lab-blue-light: #e8f0fe;
+    --lab-grey-mid:   #555555;
+    --lab-grey-light: #f5f5f5;
+    --lab-grey-border:#e0e0e0;
+    --lab-footer-bg:  #1a1a1a;
+    --lab-footer-text:#cccccc;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Source Serif 4', Georgia, serif;
-    background: var(--cream);
-    color: var(--text);
+    font-family: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--lab-white);
+    color: var(--lab-black);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    line-height: 1.6;
+    font-size: 16px;
   }
 
   /* ── HERO ── */
   .hero {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
-    color: white;
-    padding: 5rem 2rem 4rem;
+    background: var(--lab-white);
+    color: var(--lab-black);
+    padding: 3.5rem 2rem 3rem;
     text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 60% at 20% 50%, rgba(232,160,32,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 70% at 80% 30%, rgba(61,142,240,0.07) 0%, transparent 60%);
-    pointer-events: none;
+    border-bottom: 1px solid var(--lab-grey-border);
   }
 
   .hero-inner {
-    position: relative;
-    z-index: 1;
     max-width: 700px;
     margin: 0 auto;
   }
-
-  .hero-eyebrow {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
+.hero-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 1.2rem;
+    color: var(--lab-grey-mid);
+    margin-bottom: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,35 +64,43 @@
     display: inline-block;
     width: 30px;
     height: 1px;
-    background: var(--gold-light);
-    opacity: 0.5;
+    background: var(--lab-grey-border);
   }
 
   .hero h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
     font-weight: 700;
-    line-height: 1.1;
-    color: white;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.2rem;
+    line-height: 1.15;
+    color: var(--lab-black);
+    margin-bottom: 1rem;
   }
 
   .hero h2 em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--gold-light);
+    font-style: normal;
+    font-weight: 700;
+    color: var(--lab-blue);
   }
 
   .hero p {
-    font-family: 'Source Serif 4', serif;
-    font-size: 1.05rem;
-    font-weight: 300;
-    color: rgba(255,255,255,0.7);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--lab-grey-mid);
     line-height: 1.7;
     max-width: 520px;
     margin: 0 auto;
   }
+
+  .hero-credit {
+    margin-top: 1.4rem;
+    font-size: 0.875rem;
+    color: var(--lab-grey-mid);
+  }
+  .hero-credit a {
+    color: var(--lab-blue);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .hero-credit a:hover { text-decoration: underline; }
 
   /* ── MAIN ── */
   main {
@@ -117,19 +108,18 @@
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
-    padding: 4rem 2rem 5rem;
+    padding: 3rem 2rem 4rem;
   }
 
   .section-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 1.6rem;
+    color: var(--lab-grey-mid);
+    margin-bottom: 1.4rem;
     padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--lab-grey-border);
   }
 
   /* ── MODULE CARDS ── */
@@ -137,21 +127,19 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: 1px solid var(--lab-grey-border);
     overflow: hidden;
-    box-shadow: var(--shadow);
   }
 
   .module-card {
-    background: var(--white);
+    background: var(--lab-white);
     display: flex;
     align-items: center;
     gap: 1.6rem;
     padding: 1.8rem 2rem;
     text-decoration: none;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
+    color: var(--lab-black);
+    border-bottom: 1px solid var(--lab-grey-border);
     position: relative;
     transition: background 0.2s ease, box-shadow 0.2s ease;
   }
@@ -159,14 +147,14 @@
   .module-card:last-child { border-bottom: none; }
 
   .module-card:hover {
-    background: #f5f8ff;
-    box-shadow: inset 4px 0 0 var(--blue);
+    background: var(--lab-blue-light);
+    box-shadow: inset 4px 0 0 var(--lab-blue);
   }
 
   .module-card.soon {
     opacity: 0.55;
     pointer-events: none;
-    background: var(--cream);
+    background: var(--lab-grey-light);
   }
 
   /* Number badge */
@@ -174,55 +162,50 @@
     width: 52px;
     height: 52px;
     min-width: 52px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
+    border: 2px solid var(--lab-grey-border);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Playfair Display', serif;
     font-size: 1.4rem;
     font-weight: 700;
-    color: var(--navy);
-    background: var(--cream);
+    color: var(--lab-black);
+    background: var(--lab-grey-light);
     transition: border-color 0.2s, background 0.2s, color 0.2s;
   }
 
   .module-card:hover .module-num-badge {
-    border-color: var(--blue);
-    background: var(--blue);
+    border-color: var(--lab-blue);
+    background: var(--lab-blue);
     color: white;
   }
 
   .module-info { flex: 1; }
 
   .module-meta {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--lab-grey-mid);
     margin-bottom: 0.3rem;
   }
 
   .module-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: var(--navy);
+    color: var(--lab-black);
     line-height: 1.25;
     margin-bottom: 0.4rem;
     transition: color 0.2s;
   }
 
-  .module-card:hover .module-title { color: var(--blue); }
+  .module-card:hover .module-title { color: var(--lab-blue); }
 
   .module-desc {
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.88rem;
-    font-weight: 300;
-    color: var(--text-muted);
-    line-height: 1.55;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--lab-grey-mid);
+    line-height: 1.6;
   }
 
   .module-tags {
@@ -233,51 +216,46 @@
   }
 
   .tag {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--blue);
-    background: rgba(23,104,196,0.08);
+    color: var(--lab-blue);
+    background: var(--lab-blue-light);
     padding: 0.2em 0.6em;
-    border-radius: 4px;
   }
 
   .module-card.soon .tag {
-    color: var(--text-muted);
+    color: var(--lab-grey-mid);
     background: rgba(90,96,112,0.08);
   }
 
   .soon-badge {
-    font-family: 'DM Sans', sans-serif;
     font-size: 0.6rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: white;
-    background: var(--text-muted);
+    background: var(--lab-grey-mid);
     padding: 0.25em 0.65em;
-    border-radius: 4px;
   }
 
   .module-arrow {
     font-size: 1.1rem;
-    color: var(--border);
+    color: var(--lab-grey-border);
     transition: color 0.2s, transform 0.2s;
     padding-left: 0.5rem;
   }
 
   .module-card:hover .module-arrow {
-    color: var(--blue);
+    color: var(--lab-blue);
     transform: translateX(4px);
   }
 
   /* ── FOOTER ── */
   footer {
-    background: var(--navy);
-    color: rgba(255,255,255,0.5);
-    font-family: 'DM Sans', sans-serif;
+    background: var(--lab-footer-bg);
+    color: var(--lab-footer-text);
     font-size: 0.78rem;
     padding: 1.8rem 2rem;
     text-align: center;
@@ -285,7 +263,7 @@
   }
 
   footer a {
-    color: var(--gold-light);
+    color: var(--lab-footer-text);
     text-decoration: none;
   }
 
@@ -305,8 +283,8 @@
   .module-card:nth-child(4) { animation: fadeUp 0.4s ease both 0.62s; }
 
   @media (max-width: 600px) {
-    .hero { padding: 3rem 1.5rem 2.5rem; }
-    main { padding: 2.5rem 1rem 3rem; }
+    .hero { padding: 2.5rem 1.5rem 2rem; }
+    main { padding: 2rem 1rem 3rem; }
     .module-card { padding: 1.4rem 1.2rem; gap: 1rem; }
     .module-num-badge { width: 42px; height: 42px; min-width: 42px; font-size: 1.1rem; }
   }
@@ -317,10 +295,10 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">Course Modules</div>
+<div class="hero-eyebrow">Course Modules</div>
     <h2>English &amp; <em>AI</em></h2>
     <p>An introductory course exploring artificial intelligence — what it is, how it works, and what it means for language, writing, and communication.</p>
-    <p style="margin-top:1.4rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;color:rgba(255,255,255,0.45);letter-spacing:0.03em;">Designed by <a href="https://www.linkedin.com/in/hagu1/" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.65);text-decoration:none;font-weight:500;">Hamid Guedra</a> (Language Centre, <a href="https://lab.fi/en" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.65);text-decoration:none;font-weight:500;">LAB University of Applied Sciences</a>)</p>
+    <div class="hero-credit">Designed by <a href="https://www.linkedin.com/in/hagu1/" target="_blank" rel="noopener">Hamid Guedra</a> (Language Centre, <a href="https://lab.fi/en" target="_blank" rel="noopener">LAB University of Applied Sciences</a>)</div>
   </div>
 </section>
 
