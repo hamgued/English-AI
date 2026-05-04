@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arene's AI Traffic Lights</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lab-black: #1a1a1a;
+            --lab-white: #ffffff;
+            --lab-blue: #0046ad;
+            --lab-blue-light: #e8f0fe;
+            --lab-grey-mid: #555555;
+            --lab-grey-light: #f5f5f5;
+            --lab-grey-border: #e0e0e0;
+            --lab-footer-bg: #1a1a1a;
+            --lab-footer-text: #cccccc;
+
+            --red: #dc2626;
+            --red-light: #fef2f2;
+            --yellow: #ca8a04;
+            --yellow-light: #fefce8;
+            --green: #16a34a;
+            --green-light: #f0fdf4;
+            --blue-signal: #2563eb;
+            --blue-signal-light: #eff6ff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--lab-white);
+            color: var(--lab-black);
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: var(--lab-white);
+            padding: 3rem 2rem 2.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--lab-grey-border);
+        }
+        .hero-inner {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .hero-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--lab-grey-mid);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+        }
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 1px;
+            background: var(--lab-grey-border);
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--lab-black);
+            margin-bottom: 0.8rem;
+        }
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--lab-grey-mid);
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .hero-credit {
+            margin-top: 1.2rem;
+            font-size: 0.875rem;
+            color: var(--lab-grey-mid);
+        }
+        .hero-credit a {
+            color: var(--lab-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .hero-credit a:hover { text-decoration: underline; }
+        .hero-source {
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--lab-grey-mid);
+            font-style: italic;
+        }
+        .hero-source a {
+            color: var(--lab-blue);
+            text-decoration: none;
+        }
+        .hero-source a:hover { text-decoration: underline; }
+
+        /* ── MAIN LAYOUT ── */
+        main {
+            flex: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 3rem 2rem 4rem;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* ── TRAFFIC LIGHT ── */
+        .traffic-light-wrap {
+            display: flex;
+            justify-content: center;
+            position: sticky;
+            top: 2rem;
+        }
+        .traffic-light {
+            background: var(--lab-black);
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: 88px;
+        }
+        .light-bulb {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .light-bulb:hover {
+            transform: scale(1.08);
+        }
+        .light-bulb.active {
+            border-color: var(--lab-white);
+        }
+        #red-light { background: #7f1d1d; }
+        #red-light.active { background: var(--red); box-shadow: 0 0 16px 4px rgba(220,38,38,0.5); }
+        #yellow-light { background: #713f12; }
+        #yellow-light.active { background: var(--yellow); box-shadow: 0 0 16px 4px rgba(202,138,4,0.5); }
+        #green-light { background: #14532d; }
+        #green-light.active { background: var(--green); box-shadow: 0 0 16px 4px rgba(22,163,74,0.5); }
+        #blue-light { background: #1e3a5f; }
+        #blue-light.active { background: var(--blue-signal); box-shadow: 0 0 16px 4px rgba(37,99,235,0.5); }
+
+        .light-label {
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            pointer-events: none;
+        }
+        .light-bulb.active .light-label {
+            color: var(--lab-white);
+        }
+
+        /* ── CONTENT CARD ── */
+        .content-card {
+            background: var(--lab-white);
+            border: 1px solid var(--lab-grey-border);
+            padding: 2rem;
+            min-height: 380px;
+            transition: opacity 0.3s ease;
+        }
+        .content-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            line-height: 1.25;
+        }
+        .content-card p {
+            color: var(--lab-grey-mid);
+            margin-bottom: 0.8rem;
+        }
+
+        .desc-box {
+            border-left: 4px solid var(--lab-grey-border);
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            background: var(--lab-grey-light);
+        }
+        .desc-box p {
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--lab-black);
+            margin: 0;
+        }
+
+        .consequence-box {
+            background: var(--lab-grey-light);
+            border: 1px solid var(--lab-grey-border);
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .consequence-box h3 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--lab-grey-mid);
+            margin-bottom: 0.4rem;
+        }
+        .consequence-box p {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--lab-grey-mid);
+            margin: 0;
+        }
+
+        .examples-heading {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--lab-grey-mid);
+            margin-bottom: 0.8rem;
+        }
+
+        .example-list {
+            list-style: none;
+            padding: 0;
+        }
+        .example-list li {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--lab-grey-light);
+            color: var(--lab-grey-mid);
+            font-size: 0.95rem;
+        }
+        .example-list li:last-child { border-bottom: none; }
+        .example-bullet {
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        /* Colour-specific title + bullet colours */
+        .color-red    { color: var(--red); }
+        .color-yellow { color: var(--yellow); }
+        .color-green  { color: var(--green); }
+        .color-blue   { color: var(--blue-signal); }
+
+        .desc-red    { border-color: var(--red); background: var(--red-light); }
+        .desc-yellow { border-color: var(--yellow); background: var(--yellow-light); }
+        .desc-green  { border-color: var(--green); background: var(--green-light); }
+        .desc-blue   { border-color: var(--blue-signal); background: var(--blue-signal-light); }
+
+        /* Initial state summary */
+        .init-summary {
+            list-style: none;
+            padding: 1.2rem 0 0;
+            border-top: 1px solid var(--lab-grey-border);
+            margin-top: 0.8rem;
+        }
+        .init-summary li {
+            padding: 0.4rem 0;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--lab-footer-bg);
+            color: var(--lab-footer-text);
+            font-size: 0.78rem;
+            padding: 1.8rem 2rem;
+            text-align: center;
+            line-height: 1.7;
+        }
+        footer a {
+            color: var(--lab-footer-text);
+            text-decoration: none;
+        }
+        footer a:hover { text-decoration: underline; }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .hero-inner { animation: fadeUp 0.5s ease both 0.1s; }
+        main { animation: fadeUp 0.4s ease both 0.3s; }
+
+        .card-enter { opacity: 0; }
+        .card-enter-active { opacity: 1; transition: opacity 0.3s ease; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 700px) {
+            main {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem 3rem;
+                gap: 2rem;
+            }
+            .traffic-light-wrap {
+                position: static;
+            }
+            .traffic-light {
+                flex-direction: row;
+                width: auto;
+                padding: 14px 20px;
+                gap: 12px;
+            }
+            .light-bulb {
+                width: 48px;
+                height: 48px;
+            }
+            .content-card { padding: 1.5rem; }
+            .hero { padding: 2rem 1.5rem 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-eyebrow">Interactive Learning Tool</div>
+        <h1>Arene's AI Traffic Lights</h1>
+        <p class="hero-desc">A framework for determining when AI use is acceptable in learning tasks. Click each light to explore the rules.</p>
+        <div class="hero-credit">Designed by <a href="https://www.linkedin.com/in/hagu1/" target="_blank" rel="noopener">Hamid Guedra</a> (Language Centre, <a href="https://lab.fi/en" target="_blank" rel="noopener">LAB University of Applied Sciences</a>)</div>
+        <div class="hero-source">Source: Arene. n.d. Introduction to the Traffic Light Model. <a href="https://arene.fi/wp-content/uploads/PDF/2024/Teko%C3%A4lysuositukset/ARENE%20AI%20english.pdf?_t=1731419903" target="_blank" rel="noopener">Retrieved from arene.fi</a></div>
+    </div>
+</section>
+
+<!-- MAIN -->
+<main>
+    <!-- Traffic Light -->
+    <div class="traffic-light-wrap">
+        <div class="traffic-light">
+            <div id="red-light" class="light-bulb" onclick="setActiveLight('red')">
+                <span class="light-label">RED</span>
+            </div>
+            <div id="yellow-light" class="light-bulb" onclick="setActiveLight('yellow')">
+                <span class="light-label">YLW</span>
+            </div>
+            <div id="green-light" class="light-bulb" onclick="setActiveLight('green')">
+                <span class="light-label">GRN</span>
+            </div>
+            <div id="blue-light" class="light-bulb" onclick="setActiveLight('blue')">
+                <span class="light-label">BLU</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Card -->
+    <div id="content-card" class="content-card">
+        <h2 id="content-title">Click a light to start learning</h2>
+        <div id="content-body">
+            <p>Select one of the four AI Traffic Lights to see the specific rules and expectations for using Artificial Intelligence in your university assignments.</p>
+            <ul class="init-summary">
+                <li class="color-red">● Red — Prohibited</li>
+                <li class="color-yellow">● Yellow — Allowed, but must be reported</li>
+                <li class="color-green">● Green — Allowed, no report needed</li>
+                <li class="color-blue">● Blue — Required, must be used and reported</li>
+            </ul>
+            <p style="margin-top:1rem;font-size:0.85rem;font-style:italic;">This model helps you manage academic integrity and leverage AI effectively.</p>
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <div>
+        &copy; <span id="yr"></span>
+        <a href="https://www.linkedin.com/in/hagu1/" target="_blank" rel="noopener">Hamid Guedra</a>
+        &nbsp;·&nbsp;
+        <a href="https://lab.fi/en" target="_blank" rel="noopener">LAB University of Applied Sciences</a>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    const trafficLights = {
+        blue: {
+            colorClass: 'color-blue',
+            descClass: 'desc-blue',
+            title: 'Blue: USE OF AI REQUIRED',
+            description: 'Artificial intelligence must be used to create outputs. The student must report how they used AI.',
+            consequence: 'Failure to use AI will affect the assessment.',
+            justifications: [
+                'Students critically assess the text or other media they produce with AI.',
+                'Students develop the scenarios produced for them by AI (e.g., on the future of their industry).',
+                'Students create a bot or prompt an AI application to serve as a tutor.',
+                'Students use AI as an active assistant to make their work more efficient.'
+            ]
+        },
+        red: {
+            colorClass: 'color-red',
+            descClass: 'desc-red',
+            title: 'Red: USE OF AI PROHIBITED',
+            description: 'The output must be created without the help of artificial intelligence. Use only your own knowledge and skills.',
+            consequence: 'The use of AI is forbidden for a justified reason and will be interpreted as fraud.',
+            justifications: [
+                'Students demonstrate competence in mastering grammar (e.g., writing their own essay answers).',
+                'The assignment assesses the student\'s ability to reflect on their own knowledge and skills.',
+                'Solving the task with AI is too easy, and the assignment requires students\' own information for assessment.',
+                'The assignment is based on copyrighted material that may not be fed to AI.'
+            ]
+        },
+        yellow: {
+            colorClass: 'color-yellow',
+            descClass: 'desc-yellow',
+            title: 'Yellow: USE OF AI REPORTED',
+            description: 'Artificial intelligence can be used, but the student must clearly report its use.',
+            consequence: 'Failure to disclose the use of AI will be interpreted as fraud. The use of AI may affect the assessment.',
+            justifications: [
+                'Used during the thesis process (e.g., creating structure or checking text), but must be disclosed.',
+                'Students write an article and use AI to support the introduction and summary.',
+                'Students create a presentation and use AI to visualise their content.',
+                'Used for help on a multidisciplinary topic, requiring disclosure to assess the student\'s share of knowledge.'
+            ]
+        },
+        green: {
+            colorClass: 'color-green',
+            descClass: 'desc-green',
+            title: 'Green: USE OF AI ALLOWED',
+            description: 'Artificial intelligence can be used freely and without report to create the output.',
+            consequence: 'The use of AI does not affect the assessment. It does not add significant value to the student\'s performance.',
+            justifications: [
+                'The use of AI does not make students\' work easier; they may use it if they find it necessary.',
+                'Students answer questions based on video material in a closed environment (cannot be downloaded).',
+                'Students demonstrate competence in practical situations and may use AI if it is helpful.',
+                'Students familiarise themselves with material in a foreign language and use AI to translate the materials.'
+            ]
+        }
+    };
+
+    let currentActiveLight = null;
+    const contentTitle = document.getElementById('content-title');
+    const contentBody = document.getElementById('content-body');
+    const contentCard = document.getElementById('content-card');
+
+    function setActiveLight(color) {
+        if (currentActiveLight === color) return;
+
+        // Clear all active states
+        ['red','yellow','green','blue'].forEach(key => {
+            document.getElementById(`${key}-light`).classList.remove('active');
+        });
+
+        // Activate selected
+        document.getElementById(`${color}-light`).classList.add('active');
+        currentActiveLight = color;
+
+        const data = trafficLights[color];
+
+        // Transition
+        contentCard.classList.add('card-enter');
+
+        requestAnimationFrame(() => {
+            contentTitle.className = ``;
+            contentTitle.textContent = data.title;
+            contentTitle.className = `${data.colorClass}`;
+            contentTitle.style.fontSize = '1.5rem';
+            contentTitle.style.fontWeight = '700';
+            contentTitle.style.marginBottom = '1.2rem';
+            contentTitle.style.lineHeight = '1.25';
+
+            contentBody.innerHTML = `
+                <div class="desc-box ${data.descClass}">
+                    <p>${data.description}</p>
+                </div>
+                <div class="consequence-box">
+                    <h3>Consequence</h3>
+                    <p>${data.consequence}</p>
+                </div>
+                <div class="examples-heading">Examples &amp; Justifications</div>
+                <ul class="example-list">
+                    ${data.justifications.map(j => `
+                        <li>
+                            <span class="example-bullet ${data.colorClass}">•</span>
+                            <span>${j}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+
+            contentCard.classList.remove('card-enter');
+            contentCard.classList.add('card-enter-active');
+            setTimeout(() => contentCard.classList.remove('card-enter-active'), 300);
+        });
+    }
+
+    // Initialize with blue
+    window.onload = () => setActiveLight('blue');
+</script>
+</body>
+</html>
