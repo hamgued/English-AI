@@ -234,14 +234,166 @@
   .impact-card.open .impact-card-body { display: block; }
   .impact-card.open { border-color: var(--blue); }
 
-  /* FLOWCHART */
+  /* FLOWCHART — Interactive Decision Tree */
   .flowchart-source {
     font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;
   }
   .flowchart-source a { color: var(--blue); }
-  .fc-svg-wrap {
-    background: white; border: 1px solid var(--border); border-radius: 0;
-    padding: 20px 12px; margin-bottom: 28px; overflow-x: auto;
+
+  .fc-interactive {
+    margin-bottom: 28px;
+  }
+  .fc-step {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 0;
+    position: relative;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .fc-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fc-step.completed {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .fc-step + .fc-step {
+    border-top: none;
+  }
+  .fc-step-num {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+  .fc-step-question {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  .fc-step-context {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .fc-btn-row {
+    display: flex;
+    gap: 12px;
+  }
+  .fc-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 28px;
+    border: 2px solid var(--border);
+    background: white;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .fc-btn:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--cream);
+  }
+  .fc-btn-yes:hover { border-color: #16a34a; color: #16a34a; background: #f0fdf4; }
+  .fc-btn-no:hover  { border-color: #dc2626; color: #dc2626; background: #fef2f2; }
+
+  .fc-answer-badge {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    margin-top: 12px;
+  }
+  .fc-answer-yes { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+  .fc-answer-no  { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+  .fc-connector {
+    width: 2px;
+    height: 20px;
+    background: var(--blue);
+    margin: 0 auto;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .fc-connector.visible { opacity: 1; }
+
+  /* Result card */
+  .fc-result {
+    padding: 28px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fc-result.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fc-result-icon {
+    font-size: 2.4rem;
+    margin-bottom: 12px;
+  }
+  .fc-result-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .fc-result-body {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 440px;
+    margin: 0 auto 16px;
+  }
+  .fc-result-stop {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+  }
+  .fc-result-stop .fc-result-title { color: #dc2626; }
+  .fc-result-caution {
+    background: #fefce8;
+    border: 1px solid #fde68a;
+  }
+  .fc-result-caution .fc-result-title { color: #a16207; }
+  .fc-result-go {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+  }
+  .fc-result-go .fc-result-title { color: #16a34a; }
+
+  .fc-restart-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 8px 24px;
+    border: 2px solid var(--border);
+    background: white;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+  }
+  .fc-restart-btn:hover {
+    border-color: var(--blue);
+    color: var(--blue);
   }
   .fc-tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
   .fc-tip {
@@ -698,114 +850,153 @@
       <p style="font-size:0.9rem;line-height:1.6;margin-bottom:12px;">Work through each decision point to determine whether it is appropriate to use a GenAI tool for a given task.</p>
       <p class="flowchart-source">Based on: UNESCO. <a href="https://unesdoc.unesco.org/ark:/48223/pf0000385146" target="_blank">ChatGPT and Artificial Intelligence in Higher Education. Quick Start Guide</a>.</p>
 
-      <div class="fc-svg-wrap">
-        <svg viewBox="0 0 680 690" xmlns="http://www.w3.org/2000/svg"
-             style="width:100%;max-width:640px;display:block;margin:0 auto;"
-             font-family="'DM Sans', sans-serif">
-          <defs>
-            <!-- Arrowhead markers -->
-            <marker id="ah-blue"   markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#1768c4"/></marker>
-            <marker id="ah-green"  markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#2d8a4e"/></marker>
-            <marker id="ah-red"    markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#c0392b"/></marker>
-            <marker id="ah-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#b85c00"/></marker>
-            <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(14,31,59,0.15)"/>
-            </filter>
-          </defs>
+      <div class="fc-interactive" id="fc-tree">
 
-          <!-- ═══════════════════════════════ -->
-          <!--  START pill                     -->
-          <!-- ═══════════════════════════════ -->
-          <rect x="230" y="18" width="220" height="44" rx="22" fill="#1a1a1a" filter="url(#shadow)"/>
-          <text x="340" y="36" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-size="9.5" font-weight="600" letter-spacing="0.14em">START</text>
-          <text x="340" y="52" text-anchor="middle" fill="white" font-size="12.5" font-weight="500">Should I use GenAI?</text>
+        <!-- Step 1 -->
+        <div class="fc-step visible" id="fc-step-1">
+          <div class="fc-step-num">Decision 1 of 3</div>
+          <div class="fc-step-question">Is the use of GenAI allowed by your institution or teacher?</div>
+          <div class="fc-step-context">Check your course syllabus, assignment instructions, and institutional policy before proceeding.</div>
+          <div class="fc-btn-row" id="fc-btns-1">
+            <button class="fc-btn fc-btn-yes" onclick="fcAnswer(1, true)">Yes</button>
+            <button class="fc-btn fc-btn-no" onclick="fcAnswer(1, false)">No</button>
+          </div>
+        </div>
 
-          <!-- Arrow: START → D1 -->
-          <line x1="340" y1="62" x2="340" y2="103" stroke="#1768c4" stroke-width="2" marker-end="url(#ah-blue)"/>
+        <div class="fc-connector" id="fc-conn-1"></div>
 
-          <!-- ═══════════════════════════════ -->
-          <!--  DIAMOND 1                      -->
-          <!--  "Allowed by institution?"      -->
-          <!-- ═══════════════════════════════ -->
-          <polygon points="340,106 472,172 340,238 208,172" fill="#1768c4" filter="url(#shadow)"/>
-          <text x="340" y="167" text-anchor="middle" fill="white" font-size="12" font-weight="500">
-            <tspan x="340" dy="0">Allowed by your</tspan>
-            <tspan x="340" dy="17">institution / teacher?</tspan>
-          </text>
+        <!-- Step 2 -->
+        <div class="fc-step" id="fc-step-2">
+          <div class="fc-step-num">Decision 2 of 3</div>
+          <div class="fc-step-question">Does the task involve confidential or personal data?</div>
+          <div class="fc-step-context">Confidential data includes private records, personal identifiers, proprietary business information, or anything covered by data protection regulations (e.g., GDPR).</div>
+          <div class="fc-btn-row" id="fc-btns-2">
+            <button class="fc-btn fc-btn-yes" onclick="fcAnswer(2, true)">Yes</button>
+            <button class="fc-btn fc-btn-no" onclick="fcAnswer(2, false)">No</button>
+          </div>
+        </div>
 
-          <!-- YES ↓ from D1 -->
-          <line x1="340" y1="238" x2="340" y2="278" stroke="#2d8a4e" stroke-width="2.5" marker-end="url(#ah-green)"/>
-          <rect x="345" y="247" width="34" height="17" rx="3" fill="#2d8a4e"/>
-          <text x="362" y="259" text-anchor="middle" fill="white" font-size="10" font-weight="700">YES</text>
+        <div class="fc-connector" id="fc-conn-2"></div>
 
-          <!-- NO ← from D1 → STOP 1 -->
-          <polyline points="208,172 118,172" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ah-red)"/>
-          <rect x="155" y="152" width="30" height="17" rx="3" fill="#c0392b"/>
-          <text x="170" y="164" text-anchor="middle" fill="white" font-size="10" font-weight="700">NO</text>
-          <!-- STOP 1 box -->
-          <rect x="8" y="152" width="110" height="40" rx="7" fill="#c0392b" filter="url(#shadow)"/>
-          <text x="63" y="168" text-anchor="middle" fill="white" font-size="11.5" font-weight="600">Do NOT use</text>
-          <text x="63" y="183" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10.5">GenAI</text>
+        <!-- Step 3 -->
+        <div class="fc-step" id="fc-step-3">
+          <div class="fc-step-num">Decision 3 of 3</div>
+          <div class="fc-step-question">Can you verify the output and take full responsibility for it?</div>
+          <div class="fc-step-context">This means you have enough knowledge to fact-check the AI's output and you are willing to be held accountable for anything you submit.</div>
+          <div class="fc-btn-row" id="fc-btns-3">
+            <button class="fc-btn fc-btn-yes" onclick="fcAnswer(3, true)">Yes</button>
+            <button class="fc-btn fc-btn-no" onclick="fcAnswer(3, false)">No</button>
+          </div>
+        </div>
 
-          <!-- ═══════════════════════════════ -->
-          <!--  DIAMOND 2                      -->
-          <!--  "Involves confidential data?"  -->
-          <!-- ═══════════════════════════════ -->
-          <polygon points="340,280 472,346 340,412 208,346" fill="#1768c4" filter="url(#shadow)"/>
-          <text x="340" y="341" text-anchor="middle" fill="white" font-size="12" font-weight="500">
-            <tspan x="340" dy="0">Involves confidential</tspan>
-            <tspan x="340" dy="17">or personal data?</tspan>
-          </text>
+        <div class="fc-connector" id="fc-conn-3"></div>
 
-          <!-- NO ↓ from D2 (safe to continue) -->
-          <line x1="340" y1="412" x2="340" y2="452" stroke="#2d8a4e" stroke-width="2.5" marker-end="url(#ah-green)"/>
-          <rect x="345" y="421" width="26" height="17" rx="3" fill="#2d8a4e"/>
-          <text x="358" y="433" text-anchor="middle" fill="white" font-size="10" font-weight="700">NO</text>
+        <!-- Results (hidden until reached) -->
+        <div class="fc-result fc-result-stop" id="fc-result-stop1" style="display:none;">
+          <div class="fc-result-icon">🚫</div>
+          <div class="fc-result-title">Do NOT use GenAI</div>
+          <div class="fc-result-body">Your institution or teacher does not permit the use of AI tools for this task. Using GenAI here could be considered academic misconduct.</div>
+          <button class="fc-restart-btn" onclick="fcRestart()">↺ Start over</button>
+        </div>
 
-          <!-- YES ← from D2 → STOP 2 (confidential = bad) -->
-          <polyline points="208,346 118,346" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ah-red)"/>
-          <rect x="150" y="326" width="34" height="17" rx="3" fill="#c0392b"/>
-          <text x="167" y="338" text-anchor="middle" fill="white" font-size="10" font-weight="700">YES</text>
-          <!-- STOP 2 box -->
-          <rect x="8" y="326" width="110" height="40" rx="7" fill="#c0392b" filter="url(#shadow)"/>
-          <text x="63" y="342" text-anchor="middle" fill="white" font-size="11.5" font-weight="600">Do NOT use</text>
-          <text x="63" y="357" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10.5">GenAI</text>
+        <div class="fc-result fc-result-stop" id="fc-result-stop2" style="display:none;">
+          <div class="fc-result-icon">🔒</div>
+          <div class="fc-result-title">Do NOT use GenAI</div>
+          <div class="fc-result-body">The task involves confidential or personal data. Entering this data into a GenAI tool may violate privacy regulations and data protection policies (e.g., GDPR).</div>
+          <button class="fc-restart-btn" onclick="fcRestart()">↺ Start over</button>
+        </div>
 
-          <!-- ═══════════════════════════════ -->
-          <!--  DIAMOND 3                      -->
-          <!--  "Can you verify & take resp?"  -->
-          <!-- ═══════════════════════════════ -->
-          <polygon points="340,454 472,520 340,586 208,520" fill="#1768c4" filter="url(#shadow)"/>
-          <text x="340" y="515" text-anchor="middle" fill="white" font-size="12" font-weight="500">
-            <tspan x="340" dy="0">Can you verify &amp; take</tspan>
-            <tspan x="340" dy="17">full responsibility?</tspan>
-          </text>
+        <div class="fc-result fc-result-caution" id="fc-result-caution" style="display:none;">
+          <div class="fc-result-icon">⚠️</div>
+          <div class="fc-result-title">Avoid or use with extreme caution</div>
+          <div class="fc-result-body">If you cannot verify the output or take full responsibility, the risk of errors, misinformation, or unintended consequences is too high. Proceed only if you can secure expert review.</div>
+          <button class="fc-restart-btn" onclick="fcRestart()">↺ Start over</button>
+        </div>
 
-          <!-- YES ↓ from D3 → GO -->
-          <line x1="340" y1="586" x2="340" y2="618" stroke="#2d8a4e" stroke-width="2.5" marker-end="url(#ah-green)"/>
-          <rect x="345" y="595" width="34" height="17" rx="3" fill="#2d8a4e"/>
-          <text x="362" y="607" text-anchor="middle" fill="white" font-size="10" font-weight="700">YES</text>
+        <div class="fc-result fc-result-go" id="fc-result-go" style="display:none;">
+          <div class="fc-result-icon">✅</div>
+          <div class="fc-result-title">You may use GenAI</div>
+          <div class="fc-result-body">It appears appropriate to use a GenAI tool for this task. Proceed mindfully and follow the tips below.</div>
+          <button class="fc-restart-btn" onclick="fcRestart()">↺ Start over</button>
+        </div>
 
-          <!-- NO ← from D3 → CAUTION -->
-          <polyline points="208,520 118,520" stroke="#b85c00" stroke-width="2" fill="none" marker-end="url(#ah-orange)"/>
-          <rect x="155" y="500" width="30" height="17" rx="3" fill="#b85c00"/>
-          <text x="170" y="512" text-anchor="middle" fill="white" font-size="10" font-weight="700">NO</text>
-          <!-- CAUTION box -->
-          <rect x="8" y="498" width="110" height="44" rx="7" fill="#b85c00" filter="url(#shadow)"/>
-          <text x="63" y="514" text-anchor="middle" fill="white" font-size="11.5" font-weight="600">Avoid or use</text>
-          <text x="63" y="529" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="10.5">with caution</text>
-
-          <!-- ═══════════════════════════════ -->
-          <!--  GO box                         -->
-          <!-- ═══════════════════════════════ -->
-          <rect x="200" y="620" width="280" height="58" rx="10" fill="#2d8a4e" filter="url(#shadow)"/>
-          <text x="340" y="644" text-anchor="middle" fill="white" font-size="14" font-weight="700">✓  You may use GenAI</text>
-          <text x="340" y="662" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="11">Proceed mindfully — see tips below</text>
-
-          <!-- Arrow GO → tips -->
-          <line x1="340" y1="678" x2="340" y2="684" stroke="#2d8a4e" stroke-width="2" marker-end="url(#ah-green)"/>
-        </svg>
       </div>
+
+      <script>
+      (function() {
+        let fcState = {};
+
+        window.fcAnswer = function(step, answer) {
+          fcState[step] = answer;
+
+          // Show badge on answered step
+          const btns = document.getElementById('fc-btns-' + step);
+          btns.style.display = 'none';
+          const badge = document.createElement('div');
+          badge.className = 'fc-answer-badge ' + (answer ? 'fc-answer-yes' : 'fc-answer-no');
+          badge.textContent = answer ? '→ Yes' : '→ No';
+          document.getElementById('fc-step-' + step).appendChild(badge);
+
+          // Mark step completed
+          document.getElementById('fc-step-' + step).classList.add('completed');
+
+          // Determine next action
+          if (step === 1 && !answer) {
+            showResult('fc-result-stop1', step);
+          } else if (step === 2 && answer) {
+            showResult('fc-result-stop2', step);
+          } else if (step === 3 && !answer) {
+            showResult('fc-result-caution', step);
+          } else if (step === 3 && answer) {
+            showResult('fc-result-go', step);
+          } else {
+            // Show connector then next step
+            const conn = document.getElementById('fc-conn-' + step);
+            conn.classList.add('visible');
+            setTimeout(function() {
+              const next = document.getElementById('fc-step-' + (step + 1));
+              next.classList.add('visible');
+            }, 250);
+          }
+        };
+
+        function showResult(id, afterStep) {
+          const conn = document.getElementById('fc-conn-' + afterStep);
+          if (conn) conn.classList.add('visible');
+          setTimeout(function() {
+            var el = document.getElementById(id);
+            el.style.display = 'block';
+            requestAnimationFrame(function() {
+              el.classList.add('visible');
+            });
+          }, 250);
+        }
+
+        window.fcRestart = function() {
+          fcState = {};
+          // Reset all steps
+          for (var i = 1; i <= 3; i++) {
+            var step = document.getElementById('fc-step-' + i);
+            step.classList.remove('completed', 'visible');
+            if (i === 1) step.classList.add('visible');
+            // Remove badge
+            var badge = step.querySelector('.fc-answer-badge');
+            if (badge) badge.remove();
+            // Restore buttons
+            document.getElementById('fc-btns-' + i).style.display = 'flex';
+            // Hide connector
+            var conn = document.getElementById('fc-conn-' + i);
+            if (conn) conn.classList.remove('visible');
+          }
+          // Hide all results
+          ['fc-result-stop1','fc-result-stop2','fc-result-caution','fc-result-go'].forEach(function(id) {
+            var el = document.getElementById(id);
+            el.classList.remove('visible');
+            el.style.display = 'none';
+          });
+        };
+      })();
+      </script>
 
       <p style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:14px;">When using GenAI, always remember:</p>
       <div class="fc-tips-grid">
